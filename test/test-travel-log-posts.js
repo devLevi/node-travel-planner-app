@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+const chai = require("chai");
+const chaiHttp = require("chai-http");
 
 // Import server.js and use destructuring assignment to create variables for
 // server.app, server.runServer, and server.closeServer
-const {app, runServer, closeServer} = require('../server');
+const { app, runServer, closeServer } = require("../server");
 
 // declare a variable for expect from chai import
 const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('server response', function() {
+describe("server response", function() {
   // Before our tests run, we activate the server. Our `runServer`
   // function returns a promise, and we return the promise by
   // doing `return runServer`. If we didn't return a promise here,
@@ -23,7 +23,7 @@ describe('server response', function() {
   });
 
   // Close server after these tests run in case
-  // we have other test modules that need to 
+  // we have other test modules that need to
   // call `runServer`. If server is already running,
   // `runServer` will error out.
   after(function() {
@@ -34,12 +34,12 @@ describe('server response', function() {
   // return an ES6 promise or else pass a `done` callback to the
   // test that we call at the end. We prefer the first approach, so
   // we just return the chained `chai.request.get` object.
-  it('should return 400', function (done) {
-    request.get('http://localhost:8000', function (err, res, body){
-      expect(res.statusCode).to.equal(400);
-      expect(res.body).to.equal('wrong header');
-      done();
-    });
+  it("should return 400", function() {
+    return chai
+      .request(app)
+      .get("http://localhost:8000")
+      .then(function(res) {
+        res.should.have.status(400);
+      });
   });
 });
-
