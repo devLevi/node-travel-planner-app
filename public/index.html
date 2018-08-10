@@ -2,14 +2,70 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Travel Planner</title>
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe"
+        crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="description" content="enable travelers to easily plan trips ">
+    <meta name="keywords" content="travel planner, online travel planner, country information">
+    <meta name="author" content="Levi Bernard">
+    <meta name="viewport" content="width=device-width, minimum-scale=1">
 </head>
 
 <body>
-    Hello World
+    <header role="banner">
+        <div class="logo-bar">
+            <div class="home-button">
+                <a href="">
+                    <i class="fa fa-home"></i>
+                </a>
+            </div>
+            <h1>Travel Planner</h1>
+            <p class="hello-user">Are you are ready to plan your next trip?</p>
+        </div>
+    </header>
+    <div class="main-area">
+        <div class="nav-bar main-nav-bar">
+            <div class="nav-1">
+                <div class="nav-link">
+                    <a class="nav-login" href="">Log In</a>
+                </div>
+                <div class="nav-link nav-2">
+                    <a href="" class="nav-signup">Sign Up</a>
+                </div>
+            </div>
+        </div>
+
+        <!--  LANDING PAGE -->
+
+        <main role="main" id="main-page">
+            <div class="landing-page">
+                <div class="banner-photo" id="banner">
+                    <h2 class="main-title">Where are you going?</h2>
+                    <div class="signup-button">
+                        <a href="" class="nav-signup">Sign Up</a>
+                    </div>
+                </div>
+
+                <section class="website-description">
+                    <h3>Easily plan vacations and trips</h3>
+                    <p>Identify and fill out a short form for each country you plan to go to</p>
+                    <div class="img-container">
+                        <img src="..." class="landing-page-photos">
+                    </div>
+                    <div class="scrolltop">
+                        <a class="scroll" href="#banner" aria-label="return to the top of the page">
+                            <i class="fas fa-angle-double-up"></i>
+                        </a>
+                </section>
+                </div>
+        </main>
+        <script type="text/javascript" src="main.js"></script>
 </body>
 
 </html>
