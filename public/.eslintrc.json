@@ -9,12 +9,16 @@
     "sourceType": "module"
   },
   "globals": {
+    "$": true,
+    "alert": true,
     "it": true,
     "before": true,
     "beforeEach": true,
     "afterEach": true,
     "after": true,
-    "describe": true
+    "describe": true,
+    "document": true,
+    "sessionStorage": true
   },
   "rules": {
     "indent": ["error", 4],
