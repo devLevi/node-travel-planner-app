@@ -68,7 +68,7 @@
         <script type="text/javascript" src="main.js"></script>
 </body>
 
-<!--  SIGNUP PAGE -->
+<!--  LOGIN PAGE -->
 <section class="login-screen" aria-live="assertive">
     <form role="form" class="login">
         <fieldset name="login-info">
@@ -87,6 +87,65 @@
         </p>
     </form>
 </section> `
-<!--  SIGNIN PAGE -->
+<!--  SIGNUP PAGE -->
+<section class="signup-page-screen" aria-live="assertive">
+    <form role="form" class="signup">
+        <fieldset name="signup-info">
+            <div class="login-header">
+                <legend>Sign Up</legend>
+            </div>
+            <p id='notification'></p>
+            <label for="email" required>Email</label>
+            <input type="email" name="email" id="email" placeholder="Email address" required="">
+            <label for="password" required>Password</label>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <label for="password-confirm" required>Confirm password</label>
+            <input type="password" name="password" id="password-confirm" placeholder="Confirm password" required>
+        </fieldset>
+        <button type="submit" class="js-signup-button">Sign up</button>
+        <p>Already have an account?
+            <a href="" class="nav-login">Log in</p>
+        </a>
+    </form>
+</section>
+
+<!-- USER DASHBOARD PAGE -->
+
+<div class="nav-bar">
+    <div class="nav-1">
+        <div class="nav-link">
+            <a href="" class='my-plans-button'>My Plans</a>
+        </div>
+        <div class="nav-link">
+            <a href="" class="js-edit-entry plus">&#43;</a>
+        </div>
+        <div class="nav-link">
+            <a href="" class="js-logout-button">Log out</a>
+        </div>
+    </div>
+</div>
+
+<main role="main" class="user-dashboard">
+    <div class="dashboard-header">
+        <h2>My trips</h2>
+    </div>
+    <section class="trip-entries">
+        <h4>Let the journey begin!</h4>
+        <div class="entry">
+            <a href="" class="js-edit-entry">${journalEntries.length>0 ? "Add a trip": "Add my first trip"}</a>
+        </div>
+        <ul>
+            ${journalEntries ? journalEntries.map(function(entry) { return `
+            <li>
+                <h5 class="entry-title">
+                    <a data-entryid="${entry.id}">${entry.title}</a>
+                </h5>
+                <p class="entry-date">${entry.travelDate}</p>
+                <div class="entry-list">
+                    <img class="main-entry-photo" src="${entry.coverPhoto}">
+                </div>
+            </li>` }).join('\n') : ""}
+        </ul>
+    </section>
 
 </html>
