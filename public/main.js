@@ -128,12 +128,10 @@ function handleSignUpSuccess() {
                 data: JSON.stringify(newUserObject),
                 contentType: 'application/json'
             })
-                // if call is successful
                 .done(function() {
                     alert('Your account has been created, please login');
                     displayLoginPage();
                 })
-                //if the call is failing
                 .fail(function(err) {
                     console.error(err);
                     alert(`Sign up error: ${err.responseJSON.message}`);
