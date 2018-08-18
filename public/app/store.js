@@ -8,8 +8,7 @@ let store = [
     currency: "Costa Rican Colón: 1 Colón = 0.0018 USD",
     words:
       "Pura vida: “Pure life”, Brete: “Work”, Llevarla suave: “To take it easy”",
-    todo: "Visit Arenal Valcano",
-    notes: "Traveling in October / November is the most rainy time you can go"
+    todo: "Visit Arenal Valcano"
   },
   {
     _id: "111111111111111111111102",
@@ -20,8 +19,7 @@ let store = [
     currency: "Costa Rican Colón: 1 Colón = 0.0018 USD",
     words:
       "Pura vida: “Pure life”, Brete: “Work”, Llevarla suave: “To take it easy”",
-    todo: "Visit Arenal Valcano",
-    notes: "Traveling in October / November is the most rainy time you can go"
+    todo: "Visit Arenal Valcano"
   },
   {
     _id: "111111111111111111111103",
@@ -32,7 +30,6 @@ let store = [
     currency: "Costa Rican Colón: 1 Colón = 0.0018 USD",
     words:
       "Pura vida: “Pure life”, Brete: “Work”, Llevarla suave: “To take it easy”",
-    todo: "Visit Arenal Valcano",
-    notes: "Traveling in October / November is the most rainy time you can go"
+    todo: "Visit Arenal Valcano"
   }
 ];

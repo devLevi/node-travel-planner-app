@@ -1,107 +1,103 @@
 setupDashboardEventHandlers();
 
 function setupDashboardEventHandlers() {
-    $('.main-area').on(
-        'click',
-        '.my-countries-button',
-        handleMyCountriesButton
-    );
-    $('.main-area').on('click', '.js-edit-entry', handleAddEditButtons);
-    $('.main-area').on('click', '#js-edit-button', handleEditButton);
+  $(".main-area").on("click", ".my-countries-button", handleMyCountriesButton);
+  $(".main-area").on("click", ".js-edit-entry", handleAddEditButtons);
+  $(".main-area").on("click", "#js-edit-button", handleEditButton);
 }
 
 function handleMyCountriesButton(event) {
-    event.preventDefault();
-    $('.landing-page').prop('hidden', true);
-    getUserDashboard();
+  event.preventDefault();
+  $(".landing-page").prop("hidden", true);
+  getUserDashboard();
 }
 
 function handleAddEditButtons(event) {
-    event.preventDefault();
-    displayAddEditEntry();
+  event.preventDefault();
+  displayAddEditEntry();
 }
 
 function handleEditButton() {
-    const id = $(this).data('entryid');
-    getEachEntry(id, displayAddEditEntry);
+  const id = $(this).data("entryid");
+  getEachEntry(id, displayAddEditEntry);
 }
 
 function displayUserDashboard(countryEntries) {
-    const userDashboard = renderUserDashboard(countryEntries);
-    $('.landing-page').prop('hidden', true);
-    $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(userDashboard);
+  const userDashboard = renderUserDashboard(countryEntries);
+  $(".landing-page").prop("hidden", true);
+  $(".main-nav-bar").prop("hidden", true);
+  $(".main-area").html(userDashboard);
 }
 
 function getUserDashboard(user) {
-    displayUserDashboard();
-    //REMOVED AND UPDATE ONCE BACKEND IS COMPLETE
-    // $.ajax({
-    //     type: 'GET',
-    //     url: '/api/entries',
-    //     dataType: 'json',
-    //     contentType: 'application/json',
-    //     headers: {
-    //         Authorization: `Bearer ${jwt}`
-    //     }
-    // })
-    //     .done(function(result) {
-    //         console.log(result);
-    //         displayUserDashboard(result.entries);
-    //     })
-    //     .fail(function(err) {
-    //         console.err(err);
-    //     });
+  displayUserDashboard();
+  //REMOVED AND UPDATE ONCE BACKEND IS COMPLETE
+  // $.ajax({
+  //     type: 'GET',
+  //     url: '/api/entries',
+  //     dataType: 'json',
+  //     contentType: 'application/json',
+  //     headers: {
+  //         Authorization: `Bearer ${jwt}`
+  //     }
+  // })
+  //     .done(function(result) {
+  //         console.log(result);
+  //         displayUserDashboard(result.entries);
+  //     })
+  //     .fail(function(err) {
+  //         console.err(err);
+  //     });
 }
 
 function displayAddEditEntry(entry = null) {
-    console.log(entry);
-    const entryEditor = renderAddEditEntry(entry);
-    $('.landing-page').prop('hidden', true);
-    $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(entryEditor);
+  console.log(entry);
+  const entryEditor = renderAddEditEntry(entry);
+  $(".landing-page").prop("hidden", true);
+  $(".main-nav-bar").prop("hidden", true);
+  $(".main-area").html(entryEditor);
 }
 
 function displayEachEntry(entry) {
-    const eachEntry = renderEachEntry(entry);
-    $('.landing-page').prop('hidden', true);
-    $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(eachEntry);
+  const eachEntry = renderEachEntry(entry);
+  $(".landing-page").prop("hidden", true);
+  $(".main-nav-bar").prop("hidden", true);
+  $(".main-area").html(eachEntry);
 }
 
 function getEachEntry(id, callback) {
-    console.log(id);
-    //countryEntriesStorage.get(displayEachEntry, id);
-    $.ajax({
-        type: 'GET',
-        url: `/api/entries/${id}`,
-        dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
+  console.log(id);
+  //countryEntriesStorage.get(displayEachEntry, id);
+  $.ajax({
+    type: "GET",
+    url: `/api/entries/${id}`,
+    dataType: "json",
+    contentType: "application/json",
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  })
+    .done(function(entry) {
+      callback(entry);
     })
-        .done(function(entry) {
-            callback(entry);
-        })
-        .fail(function(jqXHR, error, errorThrown) {
-            console.log(jqXHR);
-            console.log(error);
-            console.log(errorThrown);
-        });
-}
-
-function handleEntryClick() {
-    $('.main-area').on('click', '.entry-title a', function() {
-        console.log('Individual entry clicked');
-        const id = $(this).data('entryid');
-
-        getEachEntry(id, displayEachEntry);
+    .fail(function(jqXHR, error, errorThrown) {
+      console.log(jqXHR);
+      console.log(error);
+      console.log(errorThrown);
     });
 }
 
+function handleEntryClick() {
+  $(".main-area").on("click", ".entry-title a", function() {
+    console.log("Individual entry clicked");
+    const id = $(this).data("entryid");
+
+    getEachEntry(id, displayEachEntry);
+  });
+}
+
 function renderUserDashboard(countryEntries) {
-    return `
+  return `
 	<div class="nav-bar">
 		<div class="nav-1">
 			<div class="nav-link"><a href="" class="my-countries-button">My Countries</a></div>
@@ -117,31 +113,31 @@ function renderUserDashboard(countryEntries) {
 			<h4>Time to plan!</h4>
             <div class="entry">
                 <a href=""class="js-edit-entry">${
-    countryEntries.length > 0
-        ? 'Add a country'
-        : 'Add my first country'
-}</a>
+                  countryEntries.length > 0
+                    ? "Add a country"
+                    : "Add my first country"
+                }</a>
             </div>
 			<ul>
             ${
-    countryEntries
-        ? countryEntries
-            .map(function(entry) {
-                return ` 
+              countryEntries
+                ? countryEntries
+                    .map(function(entry) {
+                      return ` 
                     <li>
                         <h5 class="entry-title">
                             <a data-entryid="${entry.id}">${entry.title}</a>
                         </h5>
                         <p class="entry-date">${entry.seasonToGo}</p>
                     </li>`;
-            })
-            .join('\n')
-        : ''
-}</ul></section>`;
+                    })
+                    .join("\n")
+                : ""
+            }</ul></section>`;
 }
 
 function renderAddEditEntry(entry = null) {
-    return `
+  return `
 		<div class="nav-bar">
 		<div class="nav-1">
 			<div class="nav-link"><a href="" class="my-countries-button">My Countries</a></div>
@@ -153,7 +149,7 @@ function renderAddEditEntry(entry = null) {
 		<div class="dashboard-header">
 			<h2>Edit My Country</h2>
 		</div>
-		<form id="js-edit-form" ${entry ? `data-entryid="${entry.id}"` : ''}>
+		<form id="js-edit-form" ${entry ? `data-entryid="${entry.id}"` : ""}>
 		<div class="save-delete">
 			<button type = "submit" class="save" id="js-save-button">Save</button>
 			<button class="cancel" id="js-cancel-button">Cancel</button>
@@ -161,33 +157,33 @@ function renderAddEditEntry(entry = null) {
 		<section class="edit-entry">
 			<div class="entry-title">
 				<input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" 
-				${entry ? `value="${entry.title}"` : ''} required>
+				${entry ? `value="${entry.title}"` : ""} required>
 			</div>
 			<div class="entry-date">
 				<input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here"
-				${entry ? `value="${entry.seasonToGo}"` : ''}>
+				${entry ? `value="${entry.seasonToGo}"` : ""}>
 			</div>
 			<div class="entry-description">
 				<input type="text" name="entry-description" id="country-description" 
 				placeholder="Add a short description of the country you want to visit here..." ${
-    entry ? `value="${entry.description}"` : ''
-}>
+          entry ? `value="${entry.description}"` : ""
+        }>
             </div>
 			<div class="currency">
 				<h5>Currency information</h5>
 				<input type="text" name="currency" id="entry-currency" placeholder="List the name of the currency and the conversion rate from USD here" 
-				${entry ? `value="${entry.currency}"` : ''}>
+				${entry ? `value="${entry.currency}"` : ""}>
 			</div>
 			<div class="foreign-words">
 				<h5>Foreign words to know before you go</h5>
 				<input type="text" name="foreign-words" id="entry-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." 
-				${entry ? `value="${entry.words}"` : ''}>
+				${entry ? `value="${entry.words}"` : ""}>
             </div>
             <div class="to-do">
             <h5>What do you want to do in this country?</h5>
             <input type="text" name="to-do" id="entry-to-do" placeholder="List the things you want to do in this country here" 
-            ${entry ? `value="${entry.todo}"` : ''}>
-        </div>
+            ${entry ? `value="${entry.todo}"` : ""}>
+            </div>
 		</section>
 		</form>	
 	</main>
@@ -195,7 +191,7 @@ function renderAddEditEntry(entry = null) {
 }
 
 function renderEachEntry(entry) {
-    return `
+  return `
 		<div class="nav-bar">
 		<div class="nav-1">
 			<div class="nav-link"><a href="" class="my-countries-button">My Journal</a></div>
@@ -209,11 +205,11 @@ function renderEachEntry(entry) {
 		</div>
 		<div class="edit-delete">
 			<button class="edit" id="js-edit-button" data-entryid="${
-    entry.id
-}">EDIT</button>
+        entry.id
+      }">EDIT</button>
 			<button class="delete" id="js-delete-button" data-entryid="${
-    entry.id
-}">DELETE</button>
+        entry.id
+      }">DELETE</button>
 		</div>
 		<section class="each-entry">
 			<div class="entry-title">
@@ -248,169 +244,169 @@ function renderEachEntry(entry) {
 
 //CANCEL BUTTON
 function handleCancelButton() {
-    $('.main-area').on('click', '#js-cancel-button', function() {
-        console.log('Cancel button clicked');
-        $('.landing-page').prop('hidden', true);
-        getUserDashboard();
-    });
+  $(".main-area").on("click", "#js-cancel-button", function() {
+    console.log("Cancel button clicked");
+    $(".landing-page").prop("hidden", true);
+    getUserDashboard();
+  });
 }
 
 //DELETE button
 function deleteEntry(id) {
-    //countryEntriesStorage.delete(getUserDashboard, id);
+  //countryEntriesStorage.delete(getUserDashboard, id);
 
-    $.ajax({
-        type: 'DELETE',
-        url: `/api/entries/${id}`,
-        dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
+  $.ajax({
+    type: "DELETE",
+    url: `/api/entries/${id}`,
+    dataType: "json",
+    contentType: "application/json",
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  })
+    //if call is succefull
+    .done(function() {
+      console.log("Deleting entry");
+      getUserDashboard();
     })
-        //if call is succefull
-        .done(function() {
-            console.log('Deleting entry');
-            getUserDashboard();
-        })
-        //if the call is failing
-        .fail(function(jqXHR, error, errorThrown) {
-            console.log(jqXHR);
-            console.log(error);
-            console.log(errorThrown);
-        });
+    //if the call is failing
+    .fail(function(jqXHR, error, errorThrown) {
+      console.log(jqXHR);
+      console.log(error);
+      console.log(errorThrown);
+    });
 }
 
 function handleDeleteButton() {
-    $('.main-area').on('click', '#js-delete-button', function() {
-        console.log('Delete button clicked');
-        const id = $(this).data('entryid');
-        const confirmDelete = confirm('Are you sure you want to delete this?');
-        if (confirmDelete) {
-            deleteEntry(id);
-        }
-    });
+  $(".main-area").on("click", "#js-delete-button", function() {
+    console.log("Delete button clicked");
+    const id = $(this).data("entryid");
+    const confirmDelete = confirm("Are you sure you want to delete this?");
+    if (confirmDelete) {
+      deleteEntry(id);
+    }
+  });
 }
 // SAVE BUTTON
 
 function saveEntry(newEntry) {
-    console.log(JSON.stringify(newEntry));
-    //countryEntriesStorage.update(getUserDashboard, newEntry);
-    $.ajax({
-        type: 'PUT',
-        url: `/api/entries/${newEntry.id}`,
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(newEntry),
+  console.log(JSON.stringify(newEntry));
+  //countryEntriesStorage.update(getUserDashboard, newEntry);
+  $.ajax({
+    type: "PUT",
+    url: `/api/entries/${newEntry.id}`,
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify(newEntry),
 
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  })
+    .done(function() {
+      getUserDashboard();
     })
-        .done(function() {
-            getUserDashboard();
-        })
-        .fail(function(jqXHR, error, errorThrown) {
-            console.error(jqXHR);
-            console.error(error);
-            console.error(errorThrown);
-        });
+    .fail(function(jqXHR, error, errorThrown) {
+      console.error(jqXHR);
+      console.error(error);
+      console.error(errorThrown);
+    });
 }
 
 function createEntry(title, seasonToGo, description, currency, words, todo) {
-    const newEntry = {
+  const newEntry = {
+    title,
+    seasonToGo,
+    description,
+    currency,
+    words,
+    todo
+  };
+  $.ajax({
+    type: "POST",
+    url: "/api/entries",
+    dataType: "json",
+    contentType: "application/json",
+    data: JSON.stringify(newEntry),
+
+    headers: {
+      Authorization: `Bearer ${jwt}`
+    }
+  })
+    .done(function() {
+      getUserDashboard();
+    })
+    .fail(function(jqXHR, error, errorThrown) {
+      console.error(jqXHR);
+      console.error(error);
+      console.error(errorThrown);
+    });
+}
+
+function handleSaveButton() {
+  $(".main-area").on("submit", "#js-edit-form", function(event) {
+    console.log("Save button clicked");
+    event.preventDefault();
+    let title = $("#country-title").val();
+    let seasonToGo = $("#travel-date").val();
+    let description = $("#country-description").val();
+    let currency = $("#entry-currency").val();
+    let words = $("#entry-foreign-words").val();
+    let todo = $("#entry-to-do").val();
+
+    if ($(this).data("entryid") === undefined) {
+      createEntry(title, seasonToGo, description, currency, words, todo);
+    } else {
+      const id = $(this).data("entryid");
+
+      const newEntry = {
+        id,
         title,
         seasonToGo,
         description,
         currency,
         words,
         todo
-    };
-    $.ajax({
-        type: 'POST',
-        url: '/api/entries',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(newEntry),
-
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
-    })
-        .done(function() {
-            getUserDashboard();
-        })
-        .fail(function(jqXHR, error, errorThrown) {
-            console.error(jqXHR);
-            console.error(error);
-            console.error(errorThrown);
-        });
-}
-
-function handleSaveButton() {
-    $('.main-area').on('submit', '#js-edit-form', function(event) {
-        console.log('Save button clicked');
-        event.preventDefault();
-        let title = $('#country-title').val();
-        let seasonToGo = $('#travel-date').val();
-        let description = $('#country-description').val();
-        let currency = $('#entry-currency').val();
-        let words = $('#entry-foreign-words').val();
-        let todo = $('#entry-to-do').val();
-
-        if ($(this).data('entryid') === undefined) {
-            createEntry(title, seasonToGo, description, currency, words, todo);
-        } else {
-            const id = $(this).data('entryid');
-
-            const newEntry = {
-                id,
-                title,
-                seasonToGo,
-                description,
-                currency,
-                words,
-                todo
-            };
-            saveEntry(newEntry);
-        }
-    });
+      };
+      saveEntry(newEntry);
+    }
+  });
 }
 
 // LOGOUT BUTTON
 function handleLogOutButton() {
-    $('.main-area').on('click', '.js-logout-button', function(event) {
-        event.preventDefault();
-        console.log('Logged out!');
-        jwt = null;
-        sessionStorage.clear();
-        location.reload();
-    });
+  $(".main-area").on("click", ".js-logout-button", function(event) {
+    event.preventDefault();
+    console.log("Logged out!");
+    jwt = null;
+    sessionStorage.clear();
+    location.reload();
+  });
 }
 
 // SET UP HOME button
 function handleHomeButton() {
-    $('.home-button').on('click', function() {
-        //displayUserDashboard()
-        location.reload();
-    });
+  $(".home-button").on("click", function() {
+    //displayUserDashboard()
+    location.reload();
+  });
 }
 
 function setUpEventHandlers() {
-    // rememberLogIn();
-    // handleLoginButton();
-    // handleLoginSuccess();
-    // handleSignUpButton();
-    // handleSignUpSuccess();
-    handleMyCountriesButton();
-    handleEditButton();
-    handleAddEditButtons();
-    handleEntryClick();
-    handleCancelButton();
-    handleDeleteButton();
-    handleSaveButton();
-    handleLogOutButton();
-    handleHomeButton();
+  // rememberLogIn();
+  // handleLoginButton();
+  // handleLoginSuccess();
+  // handleSignUpButton();
+  // handleSignUpSuccess();
+  handleMyCountriesButton();
+  handleEditButton();
+  handleAddEditButtons();
+  handleEntryClick();
+  handleCancelButton();
+  handleDeleteButton();
+  handleSaveButton();
+  handleLogOutButton();
+  handleHomeButton();
 }
 
 $(setUpEventHandlers);
