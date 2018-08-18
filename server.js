@@ -83,7 +83,6 @@ app.put("/plans/:id", (req, res) => {
       error: "Request path id and request body id values must match"
     });
   }
-
   const updated = {};
   const updateableFields = [
     "title",
