@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 const travelPlanSchema = mongoose.Schema({
-  country: {
+  plan: {
     title: String,
     seasonToGo: String,
     description: String,
