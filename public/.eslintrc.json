@@ -8,6 +8,13 @@
     "ecmaVersion": 2018,
     "sourceType": "module"
   },
+  "max-len": {
+    "ignoreTrailingComments": true,
+    "ignoreUrls": true,
+    "ignoreStrings": true,
+    "ignoreTemplateLiterals": true,
+    "ignoreRegExpLiterals": true
+  },
   "globals": {
     "$": true,
     "alert": true,
