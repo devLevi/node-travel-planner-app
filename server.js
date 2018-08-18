@@ -13,10 +13,10 @@ const app = express();
 app.use(morgan("common"));
 app.use(express.json());
 
-app.get("/posts", (req, res) => {
+app.get("/plans", (req, res) => {
   TravelPlan.find()
-    .then(posts => {
-      res.json(posts.map(post => post.serialize()));
+    .then(plans => {
+      res.json(plans.map(plan => plan.serialize()));
     })
     .catch(err => {
       console.error(err);
@@ -24,12 +24,45 @@ app.get("/posts", (req, res) => {
     });
 });
 
-app.get("/posts/:id", (req, res) => {
-  BlogPost.findById(req.params.id)
-    .then(post => res.json(post.serialize()))
+app.get("/plans/:id", (req, res) => {
+  TravelPlan.findById(req.params.id)
+    .then(plan => res.json(plan.serialize()))
     .catch(err => {
       console.error(err);
       res.status(500).json({ error: "something went horribly awry" });
+    });
+});
+
+app.post("/plans", (req, res) => {
+  const requiredFields = [
+    "title",
+    "seasonToGo",
+    "description",
+    "currency",
+    "words",
+    "todo"
+  ];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  TravelPlan.create({
+    title: req.body.title,
+    seasonToGO: req.body.seasonToGO,
+    description: req.body.description,
+    currency: req.body.currency,
+    words: req.body.words,
+    todo: req.body.todo
+  })
+    .then(travelPlan => res.status(201).json(travelPlan.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: "Something went wrong" });
     });
 });
 
