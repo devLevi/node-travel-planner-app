@@ -4,14 +4,12 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 const travelPlanSchema = mongoose.Schema({
-  plan: {
-    title: String,
-    seasonToGo: String,
-    description: String,
-    currency: String,
-    words: String,
-    todo: String
-  }
+  title: String,
+  seasonToGo: String,
+  description: String,
+  currency: String,
+  words: String,
+  todo: String
 });
 
 travelPlanSchema.methods.serialize = function() {
