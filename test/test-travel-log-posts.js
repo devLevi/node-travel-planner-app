@@ -112,121 +112,121 @@ describe("travel plans API resource", function() {
         });
     });
   });
-});
 
-describe("POST endpoint", function() {
-  // strategy: make a POST request with data,
-  // then prove that the post we get back has
-  // right keys, and that `id` is there (which means
-  // the data was inserted into db)
-  it("should add a new travel plan", function() {
-    const newPlan = {
-      title: faker.address.country(),
-      seasonToGo: faker.date.month(),
-      description: faker.lorem.text(),
-      currency: faker.finance.currencyName(),
-      words: faker.lorem.text(),
-      todo: faker.lorem.text()
-    };
+  describe("POST endpoint", function() {
+    // strategy: make a POST request with data,
+    // then prove that the post we get back has
+    // right keys, and that `id` is there (which means
+    // the data was inserted into db)
+    it("should add a new travel plan", function() {
+      const newPlan = {
+        title: faker.address.country(),
+        seasonToGo: faker.date.month(),
+        description: faker.lorem.text(),
+        currency: faker.finance.currencyName(),
+        words: faker.lorem.text(),
+        todo: faker.lorem.text()
+      };
 
-    return chai
-      .request(app)
-      .post("/plans")
-      .send(newPlan)
-      .then(function(res) {
-        res.should.have.status(201);
-        res.should.be.json;
-        res.body.should.be.a("object");
-        res.body.should.include.keys(
-          "id",
-          "title",
-          "description",
-          "seasonToGo",
-          "currency",
-          "words",
-          "todo"
-        );
-        res.body.title.should.equal(newPlan.title);
-        // Mongo should have created id on insertion
-        res.body.id.should.not.be.null;
-        res.body.content.should.equal(newPlan.content);
-        return TravelPlan.findById(res.body.id);
-      })
-      .then(function(plan) {
-        plan.title.should.equal(newPlan.title);
-        plan.seasonToGo.should.equal(newPlan.seasonToGo);
-        plan.description.should.equal(newPlan.description);
-        plan.currency.should.equal(newPlan.currency);
-        plan.words.should.equal(newPlan.words);
-        plan.todo.should.equal(newPlan.todo);
-      });
+      return chai
+        .request(app)
+        .post("/plans")
+        .send(newPlan)
+        .then(function(res) {
+          res.should.have.status(201);
+          res.should.be.json;
+          res.body.should.be.a("object");
+          res.body.should.include.keys(
+            "id",
+            "title",
+            "description",
+            "seasonToGo",
+            "currency",
+            "words",
+            "todo"
+          );
+          res.body.title.should.equal(newPlan.title);
+          // Mongo should have created id on insertion
+          res.body.id.should.not.be.null;
+          res.body.description.should.equal(newPlan.description);
+          return TravelPlan.findById(res.body.id);
+        })
+        .then(function(plan) {
+          plan.title.should.equal(newPlan.title);
+          plan.seasonToGo.should.equal(newPlan.seasonToGo);
+          plan.description.should.equal(newPlan.description);
+          plan.currency.should.equal(newPlan.currency);
+          plan.words.should.equal(newPlan.words);
+          plan.todo.should.equal(newPlan.todo);
+        });
+    });
   });
-});
 
-describe("PUT endpoint", function() {
-  // strategy:
-  //  1. Get an existing post from db
-  //  2. Make a PUT request to update that post
-  //  4. Prove post in db is correctly updated
-  it("should update fields you send over", function() {
-    const updateData = {
-      title: "Costa Pica",
-      seasonToGo: "anytime",
-      description:
-        "Costa Rica is small country in Central America. It is bordered by Nicaragua to the north and Panama to the south. The Caribbean Sea is to the east and the Pacific Ocean is to the west. Costa Rica is slightly smaller than the state of West Virginia.",
-      currency: "Costa Rican Colón: 1 Colón = 1 million USD",
-      words: "words",
-      todo: "do stuff"
-    };
+  describe("PUT endpoint", function() {
+    // strategy:
+    //  1. Get an existing post from db
+    //  2. Make a PUT request to update that post
+    //  4. Prove post in db is correctly updated
+    it("should update fields you send over", function() {
+      const updateData = {
+        title: "Costa Pica",
+        seasonToGo: "anytime",
+        description:
+          "Costa Rica is small country in Central America. It is bordered by Nicaragua to the north and Panama to the south. The Caribbean Sea is to the east and the Pacific Ocean is to the west. Costa Rica is slightly smaller than the state of West Virginia.",
+        currency: "Costa Rican Colón: 1 Colón = 1 million USD",
+        words: "words",
+        todo: "do stuff"
+      };
 
-    return TravelPlan.findOne()
-      .then(plan => {
-        updateData.id = plan.id;
+      return TravelPlan.findOne()
+        .then(plan => {
+          updateData.id = plan.id;
 
-        return chai
-          .request(app)
-          .put(`/plans/${plan.id}`)
-          .send(updateData);
-      })
-      .then(res => {
-        res.should.have.status(204);
-        return TravelPlan.findById(updateData.id);
-      })
-      .then(plan => {
-        plan.title.should.equal(updateData.title);
-        plan.seasonToGo.should.equal(updateData.seasonToGo);
-        plan.description.should.equal(updateData.description);
-        plan.currency.should.equal(updateData.currency);
-        plan.words.should.equal(updateData.words);
-        plan.todo.should.equal(updateData.todo);
-      });
+          return chai
+            .request(app)
+            .put(`/plans/${plan.id}`)
+            .send(updateData);
+        })
+        .then(res => {
+          res.should.have.status(204);
+          return TravelPlan.findById(updateData.id);
+        })
+        .then(plan => {
+          plan.title.should.equal(updateData.title);
+          plan.seasonToGo.should.equal(updateData.seasonToGo);
+          plan.description.should.equal(updateData.description);
+          plan.currency.should.equal(updateData.currency);
+          plan.words.should.equal(updateData.words);
+          plan.todo.should.equal(updateData.todo);
+        });
+    });
   });
-});
 
-describe("DELETE endpoint", function() {
-  // strategy:
-  //  1. get a post
-  //  2. make a DELETE request for that post's id
-  //  3. assert that response has right status code
-  //  4. prove that post with the id doesn't exist in db anymore
-  it("should delete a post by id", function() {
-    let plan;
+  describe("DELETE endpoint", function() {
+    // strategy:
+    //  1. get a plan
+    //  2. make a DELETE request for that plan's id
+    //  3. assert that response has right status code
+    //  4. prove that plan with the id doesn't exist in db anymore
+    it("should delete a travel plan by id", function() {
+      let plan;
 
-    return TravelPlan.findOne()
-      .then(_plan => {
-        post = _plan;
-        return chai.request(app).delete(`/plans/${plan.id}`);
-      })
-      .then(res => {
-        res.should.have.status(204);
-        return TravelPlan.findById(plan.id);
-      })
-      .then(_plan => {
-        // when a variable's value is null, chaining `should`
-        // doesn't work. so `_plan.should.be.null` would raise
-        // an error. `should.be.null(_plan)` is how we can
-        // make assertions about a null value.
-        should.not.exist(_plan);
-      });
+      return TravelPlan.findOne()
+        .then(_plan => {
+          plan = _plan;
+          return chai.request(app).delete(`/plans/${plan.id}`);
+        })
+        .then(res => {
+          res.should.have.status(204);
+          return TravelPlan.findById(plan.id);
+        })
+        .then(_plan => {
+          // when a variable's value is null, chaining `should`
+          // doesn't work. so `_plan.should.be.null` would raise
+          // an error. `should.be.null(_plan)` is how we can
+          // make assertions about a null value.
+          should.not.exist(_plan);
+        });
+    });
   });
 });

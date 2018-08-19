@@ -53,7 +53,7 @@ app.post("/plans", (req, res) => {
 
   TravelPlan.create({
     title: req.body.title,
-    seasonToGO: req.body.seasonToGO,
+    seasonToGo: req.body.seasonToGo,
     description: req.body.description,
     currency: req.body.currency,
     words: req.body.words,
@@ -119,7 +119,7 @@ app.use("*", function(req, res) {
 let server;
 
 // this function connects to our database, then starts the server
-function runServer(databaseUrl, port = PORT) {
+function runServer(databaseUrl = DATABASE_URL, port = PORT) {
   return new Promise((resolve, reject) => {
     mongoose.connect(
       databaseUrl,
