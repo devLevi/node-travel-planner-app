@@ -15,13 +15,11 @@ router.use(jwtAuth);
 router.get('/', (req, res) => {
     TravelPlan.find({ username: req.user.username })
         .then(plans => {
-            console.log(req.user);
             res.json({
                 plans: plans.map(plan => plan.serialize())
             });
         })
         .catch(err => {
-            console.error(err);
             res.status(500).json({ message: 'Internal server error' });
         });
 });
