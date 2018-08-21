@@ -24,7 +24,7 @@ function tearDownDb() {
 }
 
 function generateTravelPlanData() {
-    // Generate an object representing a Journal Entry
+    // Generate an object representing a Journal Plan
     return {
         title: faker.address.country(),
         seasonToGo: faker.date.month(),
@@ -143,7 +143,7 @@ describe('travel plans API resource', function() {
     describe('POST endpoint', function() {
         //strategy:
         // 1. make a POST req with data
-        // 2. Prove that the entry we get back has right keys
+        // 2. Prove that the plan we get back has right keys
         // 3. Make sure it has id
         it('should add a new travel plan', function() {
             const newPlan = generateTravelPlanData();
