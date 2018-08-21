@@ -1,9 +1,2 @@
 language: node_js
 node_js: node
-deploy: stormy-ravine-38943
-  provider: heroku
-  api_key:
-    secure: p2uOXYZCD4GUZGHrGi4mivxusEntIH987k2BUNb72Iebi4C9CV9qTW3HXYFCNYchDpnJI+8Jm6eEU7+sG4qMH1dzjROYAcKKhugJ08yGo5F9j8MQjjwbAz4YVrc2p8D9S0eDfSk5QndHTlWUEqFbouQV0O38X8fLSLZ4nUYVujT6ChltjkCnFdfPrr/Y5hrHZyYjaxoyF3WDSmUEHja32R64BULdlWGucA3z7H2zqJJ0sKM/RKRZO/cYtoncNBviEfw4qMHp/qljmm5ptqNiwTbcryNbdomk72iFeCL62HfH1ZhzEucUuJv/oIdHv/MjHnY73g46MQGUMFW9LZcCMtVqwlQPWdiTi+MYowM9h30hwWE/DGfVVwrpJTM7Ey+UiMK2b7pWo7o3oL3VY3FIfgIlXbQ8eciUaHhnONiaBcVQlhME1jQzebI8u9op+djB11dsmcvs73BQf9O0twFAb/2eEaveZ+g8R4OqMPY8j5pskd6CQexNg3JumTCRuru1GUbmgwNfVFCBC/Aj6LJMzAV9WD4B++2S4DsNWU0PHxLg4qtr8sQbJbhCJmXG4ectx9jlL4HBwOdqJCz6in0xeMNkl5ILdMogHvyJDCY/UkbTuz6usmInxyLWMklf0/ps82e4SjQczwLuzVjshM5miICCjlS4sJUTVHnWnz1u7DQ=
-  app: node-travel-planner-app
-  on:
-    repo: devLevi/node-travel-planner-app
