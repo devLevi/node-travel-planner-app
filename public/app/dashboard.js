@@ -1,3 +1,5 @@
+let jwt;
+
 setupDashboardEventHandlers();
 
 function setupDashboardEventHandlers() {

@@ -1,9 +1,7 @@
 setupLoginEventHandlers();
 
 function setupLoginEventHandlers() {
-    // handleLoginButton();
     $('.main-area').on('click', '.nav-login', handleLoginButton);
-    // handleLoginAuth();
     $('.main-area').on('submit', '.login', handleLoginAuth);
 }
 
