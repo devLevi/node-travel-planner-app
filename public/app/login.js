@@ -41,11 +41,11 @@ function handleLoginAuth(event) {
     console.log('Authenticating User ...');
     event.preventDefault();
     // Get the inputs from the user in Log In form
-    const username = $('#email').val();
+    const email = $('#email').val();
     const password = $('#password').val();
 
     // validate the input
-    if (username == '') {
+    if (email == '') {
         alert('Please input user name');
     } else if (password == '') {
         alert('Please input password');
@@ -53,35 +53,30 @@ function handleLoginAuth(event) {
         // if the input is valid
         // create the payload object (what data we send to the api call)
         const loginUserObject = {
-            username: username,
+            email: email,
             password: password
         };
         console.log(loginUserObject);
-        displayUserDashboard([]);
+        // displayUserDashboard([]);
         // TODO: Enable once we have API auth
-        /*$.ajax({
+        $.ajax({
             type: 'POST',
             url: '/api/auth/login',
             dataType: 'json',
             data: JSON.stringify(loginUserObject),
             contentType: 'application/json'
-        }).done(function(data) {
-            jwt = data.authToken;
-            sessionStorage.setItem('authToken', jwt);
-            sessionStorage.setItem(
-                'username',
-                loginUserObject.username
-            );
-            console.log(sessionStorage.getItem('authToken'));
-            console.log(jwt);
-            console.log(data);
-            console.log(loginUserObject.username);
-            getUserDashboard(loginUserObject.username);
-        }).fail(function(err) {
-            console.error(err);
-            $('#notification').html(
-                'Login failed. Try again or click below to sign up!'
-            );
-        });*/
+        })
+            .done(function(data) {
+                jwt = data.authToken;
+                sessionStorage.setItem('authToken', jwt);
+                sessionStorage.setItem('email', loginUserObject.email);
+                getUserDashboard(loginUserObject.email);
+            })
+            .fail(function(err) {
+                console.error(err);
+                $('#notification').html(
+                    'Login failed. Try again or click below to sign up!'
+                );
+            });
     }
 }

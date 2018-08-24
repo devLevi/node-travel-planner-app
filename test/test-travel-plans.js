@@ -5,13 +5,17 @@ const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const faker = require('faker');
 const mongoose = require('mongoose');
+const jsonwebtoken = require('jsonwebtoken');
 
 chai.use(chaiHttp);
 
 const { TravelPlan } = require('../plans');
-const { app, runServer, closeServer } = require('../server');
-const { TESTDATABASE_URL } = require('../config');
+const { app, runServer, closeServer } = require('../server.js');
+const { TESTDATABASE_URL, JWT_SECRET } = require('../config.js');
 const { User } = require('../users');
+
+let email = 'Levi';
+let password = '123';
 
 function tearDownDb() {
     return new Promise((resolve, reject) => {
@@ -24,7 +28,7 @@ function tearDownDb() {
 }
 
 function generateTravelPlanData() {
-    // Generate an object representing a Journal Plan
+    // Generate an object representing a travel plan
     return {
         title: faker.address.country(),
         seasonToGo: faker.date.month(),
@@ -32,7 +36,7 @@ function generateTravelPlanData() {
         currency: faker.finance.currencyName(),
         words: faker.lorem.text(),
         todo: faker.lorem.text(),
-        username
+        email
     };
 }
 
@@ -47,11 +51,11 @@ function seedTravelPlanData() {
     return TravelPlan.insertMany(seedData);
 }
 
-const username = 'Levi';
-const password = '123';
-let jwt;
-
 describe('travel plans API resource', function() {
+    let email = 'Levi';
+    let password = '123';
+    let jwt;
+
     before(function() {
         return runServer(TESTDATABASE_URL);
     });
@@ -60,7 +64,7 @@ describe('travel plans API resource', function() {
         return User.hashPassword(password)
             .then(password =>
                 User.create({
-                    username,
+                    email,
                     password
                 })
             )
@@ -68,7 +72,7 @@ describe('travel plans API resource', function() {
                 return chai
                     .request(app)
                     .post('/api/auth/login')
-                    .send({ username, password });
+                    .send({ email, password });
             })
             .then(function(res) {
                 jwt = res.body.authToken;
@@ -86,18 +90,27 @@ describe('travel plans API resource', function() {
 
     describe('GET endpoint', function() {
         it('should return all existing travel plans', function() {
+            const token = jsonwebtoken.sign(
+                {
+                    user: { email }
+                },
+                JWT_SECRET,
+                {
+                    algorithm: 'HS256',
+                    subject: email,
+                    expiresIn: '7d'
+                }
+            );
+
             let res;
             return chai
                 .request(app)
                 .get('/api/plans')
+                .set('authorization', `Bearer ${token}`)
                 .then(_res => {
                     res = _res;
-                    res.should.have.status(200);
-                    res.body.should.have.lengthOf.at.least(1);
-                    return TravelPlan.count();
-                })
-                .then(count => {
-                    res.body.should.have.lengthOf(count);
+                    expect(res).to.have.status(200);
+                    expect(res.body.plans).to.have.lengthOf.at.least(1);
                 });
         });
 
@@ -107,14 +120,14 @@ describe('travel plans API resource', function() {
                 .request(app)
                 .get('/api/plans')
                 .then(function(res) {
-                    res.should.have.status(200);
-                    res.should.be.json;
-                    res.body.should.be.a('array');
-                    res.body.should.have.lengthOf.at.least(1);
+                    expect(res).to.have.status(200);
+                    expect(res).to.be.json;
+                    expect(res.body).to.be.a('array');
+                    expect(res.body).to.be.lengthOf.at.least(1);
 
                     res.body.forEach(function(plan) {
-                        plan.should.be.a('object');
-                        plan.should.include.keys(
+                        expect(plan).to.be.a('object');
+                        expect(plan).to.include.keys(
                             'id',
                             'title',
                             'description',
@@ -130,12 +143,12 @@ describe('travel plans API resource', function() {
                     return TravelPlan.findById(resPlan.id);
                 })
                 .then(plan => {
-                    resPlan.title.should.equal(plan.title);
-                    resPlan.seasonToGo.should.equal(plan.seasonToGo);
-                    resPlan.description.should.equal(plan.description);
-                    resPlan.currency.should.equal(plan.currency);
-                    resPlan.words.should.equal(plan.words);
-                    resPlan.todo.should.equal(plan.todo);
+                    expect(resPlan.title).to.equal(plan.title);
+                    expect(resPlan.seasonToGo).to.equal(plan.seasonToGo);
+                    expect(resPlan.description).to.equal(plan.description);
+                    expect(resPlan.currency).to.equal(plan.currency);
+                    expect(resPlan.words).to.equal(plan.words);
+                    expect(resPlan.todo).to.equal(plan.todo);
                 });
         });
     });
@@ -153,10 +166,10 @@ describe('travel plans API resource', function() {
                 .set('Authorization', `Bearer ${jwt}`)
                 .send(newPlan)
                 .then(function(res) {
-                    res.should.have.status(201);
-                    res.should.be.json;
-                    res.body.should.be.a('object');
-                    res.body.should.include.keys(
+                    expect(res).to.have.status(201);
+                    expect(res).to.be.json;
+                    expect(res.body).to.be.a('object');
+                    expect(res.body).to.include.keys(
                         'id',
                         'title',
                         'description',
@@ -165,19 +178,18 @@ describe('travel plans API resource', function() {
                         'words',
                         'todo'
                     );
-                    res.body.title.should.equal(newPlan.title);
+                    expect(res.body.title).to.equal(newPlan.title);
                     // Mongo should have created id on insertion
-                    res.body.id.should.not.be.null;
-                    res.body.description.should.equal(newPlan.description);
+                    expect(res.body.description).to.equal(newPlan.description);
                     return TravelPlan.findById(res.body.id);
                 })
                 .then(function(plan) {
-                    plan.title.should.equal(newPlan.title);
-                    plan.seasonToGo.should.equal(newPlan.seasonToGo);
-                    plan.description.should.equal(newPlan.description);
-                    plan.currency.should.equal(newPlan.currency);
-                    plan.words.should.equal(newPlan.words);
-                    plan.todo.should.equal(newPlan.todo);
+                    expect(plan.title).to.equal(newPlan.title);
+                    expect(plan.seasonToGo).to.equal(newPlan.seasonToGo);
+                    expect(plan.description).to.equal(newPlan.description);
+                    expect(plan.currency).to.equal(newPlan.currency);
+                    expect(plan.words).to.equal(newPlan.words);
+                    expect(plan.todo).to.equal(newPlan.todo);
                 });
         });
     });
@@ -209,16 +221,16 @@ describe('travel plans API resource', function() {
                         .send(updateData);
                 })
                 .then(res => {
-                    res.should.have.status(204);
+                    expect(res).to.have.status(204);
                     return TravelPlan.findById(updateData.id);
                 })
                 .then(plan => {
-                    plan.title.should.equal(updateData.title);
-                    plan.seasonToGo.should.equal(updateData.seasonToGo);
-                    plan.description.should.equal(updateData.description);
-                    plan.currency.should.equal(updateData.currency);
-                    plan.words.should.equal(updateData.words);
-                    plan.todo.should.equal(updateData.todo);
+                    expect(plan.title).to.equal(updateData.title);
+                    expect(plan.seasonToGo).to.equal(updateData.seasonToGo);
+                    expect(plan.description).to.equal(updateData.description);
+                    expect(plan.currency).to.equal(updateData.currency);
+                    expect(plan.words).to.equal(updateData.words);
+                    expect(plan.todo).to.equal(updateData.todo);
                 });
         });
     });
@@ -241,11 +253,11 @@ describe('travel plans API resource', function() {
                         .set('Authorization', `Bearer ${jwt}`);
                 })
                 .then(res => {
-                    res.should.have.status(204);
+                    expect(res).to.have.status(204);
                     return TravelPlan.findById(plan.id);
                 })
                 .then(_plan => {
-                    should.not.exist(_plan);
+                    expect(_plan).to.exist;
                 });
         });
     });

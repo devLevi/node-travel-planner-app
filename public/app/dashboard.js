@@ -10,6 +10,12 @@ function setupDashboardEventHandlers() {
     );
     $('.main-area').on('click', '.js-edit-plan', handleAddEditButtons);
     $('.main-area').on('click', '#js-edit-button', handleEditButton);
+    $('.main-area').on('submit', '#js-edit-form', handleSaveButton);
+    $('.main-area').on('click', '.plan-title a', handlePlanClick);
+    $('.main-area').on('click', '#js-cancel-button', handleCancelButton);
+    $('.main-area').on('click', '#js-delete-button', handleDeleteButton);
+    $('.main-area').on('click', '.js-logout-button', handleLogOutButton);
+    $('.home-button').on('click', handleHomeButton);
 }
 
 function handleMyCountriesButton(event) {
@@ -28,6 +34,63 @@ function handleEditButton() {
     getEachPlan(id, displayAddEditPlan);
 }
 
+function handleSaveButton(event) {
+    event.preventDefault();
+    let title = $('#country-title').val();
+    let seasonToGo = $('#travel-date').val();
+    let description = $('#country-description').val();
+    let currency = $('#plan-currency').val();
+    let words = $('#plan-foreign-words').val();
+    let todo = $('#plan-to-do').val();
+
+    if ($(this).data('planid') === undefined) {
+        createPlan(title, seasonToGo, description, currency, words, todo);
+    } else {
+        const id = $(this).data('planid');
+
+        const newPlan = {
+            id,
+            title,
+            seasonToGo,
+            description,
+            currency,
+            words,
+            todo
+        };
+        savePlan(newPlan);
+    }
+}
+
+function handlePlanClick() {
+    const id = $(this).data('planid');
+    getEachPlan(id, displayEachPlan);
+}
+
+function handleCancelButton() {
+    $('.landing-page').prop('hidden', true);
+    getUserDashboard();
+}
+
+function handleDeleteButton() {
+    const id = $(this).data('planid');
+    const confirmDelete = alert('Are you sure you want to delete this?');
+    if (confirmDelete) {
+        deletePlan(id);
+    }
+}
+
+function handleLogOutButton(event) {
+    event.preventDefault();
+    console.log('Logged out!');
+    jwt = null;
+    sessionStorage.clear();
+    location.reload();
+}
+
+function handleHomeButton() {
+    location.reload();
+}
+
 function displayUserDashboard(countryPlans) {
     const userDashboard = renderUserDashboard(countryPlans);
     $('.landing-page').prop('hidden', true);
@@ -36,23 +99,23 @@ function displayUserDashboard(countryPlans) {
 }
 
 function getUserDashboard(user) {
-    displayUserDashboard();
-    //REMOVED AND UPDATE ONCE BACKEND IS COMPLETE
-    // $.ajax({
-    //     type: 'GET',
-    //     url: '/api/plans',
-    //     dataType: 'json',
-    //     contentType: 'application/json',
-    //     headers: {
-    //         Authorization: `Bearer ${jwt}`
-    //     }
-    // })
-    //     .done(function(result) {
-    //         displayUserDashboard(result.plans);
-    //     })
-    //     .fail(function(err) {
-    //         console.err(err);
-    //     });
+    // displayUserDashboard();
+    // REMOVED AND UPDATE ONCE BACKEND IS COMPLETE
+    $.ajax({
+        type: 'GET',
+        url: '/api/plans',
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+        .done(function(result) {
+            displayUserDashboard(result.plans);
+        })
+        .fail(function(err) {
+            console.err(err);
+        });
 }
 
 function displayAddEditPlan(plan = null) {
@@ -92,16 +155,7 @@ function getEachPlan(id, callback) {
         });
 }
 
-function handlePlanClick() {
-    $('.main-area').on('click', '.plan-title a', function() {
-        console.log('Individual plan clicked');
-        const id = $(this).data('planid');
-
-        getEachPlan(id, displayEachPlan);
-    });
-}
-
-function renderUserDashboard(countryPlans) {
+function renderUserDashboard() {
     return `
 	<div class="nav-bar">
 		<div class="nav-1">
@@ -117,28 +171,9 @@ function renderUserDashboard(countryPlans) {
 		<section class='country-plans'>
 			<h4>Time to plan!</h4>
             <div class="plan">
-                <a href=""class="js-edit-plan">${
-    countryPlans.length > 0
-        ? 'Add a country'
-        : 'Add my first country'
-}</a>
+                <a href=""class="js-edit-plan">Add a country</a>
             </div>
-			<ul>
-            ${
-    countryPlans
-        ? countryPlans
-            .map(function(plan) {
-                return ` 
-                    <li>
-                        <h5 class="plan-title">
-                            <a data-planid="${plan.id}">${plan.title}</a>
-                        </h5>
-                        <p class="plan-date">${plan.seasonToGo}</p>
-                    </li>`;
-            })
-            .join('\n')
-        : ''
-}</ul></section>`;
+        </section>`;
 }
 
 function renderAddEditPlan(plan = null) {
@@ -154,7 +189,7 @@ function renderAddEditPlan(plan = null) {
 		<div class="dashboard-header">
 			<h2>Edit My Country</h2>
 		</div>
-		<form id="js-edit-form" ${plan ? `data-planid="${plan.id}"` : ''}>
+		<form id="js-edit-form" data-planid="${plan.id}">
 		<div class="save-delete">
 			<button type = "submit" class="save" id="js-save-button">Save</button>
 			<button class="cancel" id="js-cancel-button">Cancel</button>
@@ -162,32 +197,35 @@ function renderAddEditPlan(plan = null) {
 		<section class="edit-plan">
 			<div class="plan-title">
 				<input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" 
-				${plan ? `value="${plan.title}"` : ''} required>
+				value="${plan.title}" required>
 			</div>
 			<div class="plan-date">
 				<input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here"
-				${plan ? `value="${plan.seasonToGo}"` : ''}>
+				value="${plan.seasonToGo}"}>
 			</div>
 			<div class="plan-description">
 				<input type="text" name="plan-description" id="country-description" 
-				placeholder="Add a short description of the country you want to visit here..." ${
-    plan ? `value="${plan.description}"` : ''
-}>
+				placeholder="Add a short description of the country you want to visit here..." value="${
+    plan.description
+}">
             </div>
 			<div class="currency">
 				<h5>Currency information</h5>
-				<input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here" 
-				${plan ? `value="${plan.currency}"` : ''}>
+				<input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here" value="${
+    plan.currency
+}">
 			</div>
 			<div class="foreign-words">
 				<h5>Foreign words to know before you go</h5>
-				<input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." 
-				${plan ? `value="${plan.words}"` : ''}>
+				<input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." value="${
+    plan.words
+}">
             </div>
             <div class="to-do">
             <h5>What do you want to do in this country?</h5>
-            <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" 
-            ${plan ? `value="${plan.todo}"` : ''}>
+            <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" value="${
+    plan.todo
+}">
             </div>
 		</section>
 		</form>	
@@ -245,18 +283,9 @@ function renderEachPlan(plan) {
 	`;
 }
 
-//CANCEL BUTTON
-function handleCancelButton() {
-    $('.main-area').on('click', '#js-cancel-button', function() {
-        console.log('Cancel button clicked');
-        $('.landing-page').prop('hidden', true);
-        getUserDashboard();
-    });
-}
-
 //DELETE button
 function deletePlan(id) {
-    //countryPlansStorage.delete(getUserDashboard, id);
+    // countryPlansStorage.delete(getUserDashboard, id);
 
     $.ajax({
         type: 'DELETE',
@@ -279,20 +308,9 @@ function deletePlan(id) {
         });
 }
 
-function handleDeleteButton() {
-    $('.main-area').on('click', '#js-delete-button', function() {
-        console.log('Delete button clicked');
-        const id = $(this).data('planid');
-        const confirmDelete = confirm('Are you sure you want to delete this?');
-        if (confirmDelete) {
-            deletePlan(id);
-        }
-    });
-}
 // SAVE BUTTON
 
 function savePlan(newPlan) {
-    console.log(JSON.stringify(newPlan));
     //countryPlansStorage.update(getUserDashboard, newPlan);
     $.ajax({
         type: 'PUT',
@@ -300,7 +318,6 @@ function savePlan(newPlan) {
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(newPlan),
-
         headers: {
             Authorization: `Bearer ${jwt}`
         }
@@ -344,71 +361,3 @@ function createPlan(title, seasonToGo, description, currency, words, todo) {
             console.error(errorThrown);
         });
 }
-
-function handleSaveButton() {
-    $('.main-area').on('submit', '#js-edit-form', function(event) {
-        console.log('Save button clicked');
-        event.preventDefault();
-        let title = $('#country-title').val();
-        let seasonToGo = $('#travel-date').val();
-        let description = $('#country-description').val();
-        let currency = $('#plan-currency').val();
-        let words = $('#plan-foreign-words').val();
-        let todo = $('#plan-to-do').val();
-
-        if ($(this).data('planid') === undefined) {
-            createPlan(title, seasonToGo, description, currency, words, todo);
-        } else {
-            const id = $(this).data('planid');
-
-            const newPlan = {
-                id,
-                title,
-                seasonToGo,
-                description,
-                currency,
-                words,
-                todo
-            };
-            savePlan(newPlan);
-        }
-    });
-}
-
-// LOGOUT BUTTON
-function handleLogOutButton() {
-    $('.main-area').on('click', '.js-logout-button', function(event) {
-        event.preventDefault();
-        console.log('Logged out!');
-        jwt = null;
-        sessionStorage.clear();
-        location.reload();
-    });
-}
-
-// SET UP HOME button
-function handleHomeButton() {
-    $('.home-button').on('click', function() {
-        //displayUserDashboard()
-        location.reload();
-    });
-}
-
-function setUpEventHandlers() {
-    // rememberLogIn();
-    // handleLoginButton();
-    // handleLoginSuccess();
-    // handleSignUpButton();
-    // handleSignUpSuccess();
-    handleMyCountriesButton();
-    handleEditButton();
-    handleAddEditButtons();
-    handlePlanClick();
-    handleCancelButton();
-    handleDeleteButton();
-    handleSaveButton();
-    handleLogOutButton();
-    handleHomeButton();
-}
-
-$(setUpEventHandlers);

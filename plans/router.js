@@ -1,44 +1,14 @@
 'use strict';
 const express = require('express');
 
+const router = express.Router();
+const passport = require('passport');
 const { TravelPlan } = require('./models');
 
-const router = express.Router();
-
 router.use(express.json());
-const passport = require('passport');
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 router.use(jwtAuth);
-
-// GET request
-router.get('/', (req, res) => {
-    TravelPlan.find({ username: req.user.username })
-        .then(plans => {
-            res.json({
-                plans: plans.map(plan => plan.serialize())
-            });
-        })
-        .catch(err => {
-            res.status(500).json({ message: 'Internal server error' });
-        });
-});
-
-// GET by id
-router.get('/:id', (req, res) => {
-    TravelPlan.findById(req.params.id)
-        .then(plan => {
-            if (req.user.username === plan.username) {
-                res.json(plan.serialize());
-            } else {
-                res.status(401).json({ message: 'Unauthorized user' });
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ message: 'Internal server error' });
-        });
-});
 
 //POST request
 router.post('/', (req, res) => {
@@ -67,10 +37,26 @@ router.post('/', (req, res) => {
         words: req.body.words,
         todo: req.body.todo
     })
-        .then(plan => res.status(201).json(plan.serialize()))
+        .then(plan => {
+            return res.status(201).json(plan.serialize());
+        })
         .catch(err => {
             console.error(err);
             res.status(500).json({ message: 'Something went wrong' });
+        });
+});
+
+//GET request
+router.get('/', (req, res) => {
+    TravelPlan.find() // REMOVED USERNAME REQ
+        .then(plans => {
+            res.json({
+                plans: plans.map(plan => plan.serialize())
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: 'Internal server error' });
         });
 });
 
@@ -99,33 +85,30 @@ router.put('/:id', (req, res) => {
 
     TravelPlan.findById(req.params.id)
         .then(function(plan) {
-            if (req.user.username === plan.username) {
+            if (req.user.email === plan.email) {
                 TravelPlan.findByIdAndUpdate(req.params.id, {
                     $set: toUpdate
-                }).then(plan => res.status(204).end());
+                }).then(() => res.status(204).end());
             } else {
                 res.status(401).json({ message: 'Unauthorized user' });
             }
         })
-
-        .catch(err =>
-            res.status(500).json({ message: 'Something went wrong' })
-        );
+        .catch(() => res.status(500).json({ message: 'Something went wrong' }));
 });
 
 // DELETE request
 router.delete('/:id', (req, res) => {
     TravelPlan.findById(req.params.id)
-        .then(function(plan) {
-            if (req.user.username === plan.username) {
-                TravelPlan.findByIdAndRemove(req.params.id).then(plan =>
+        .then(plan => {
+            if (req.user.email === plan.email) {
+                TravelPlan.findByIdAndRemove(req.params.id).then(() =>
                     res.status(204).end()
                 );
             } else {
                 res.status(401).json({ message: 'Unauthorized user' });
             }
         })
-        .catch(err =>
+        .catch(() =>
             res.status(500).json({ message: 'Internal server error' })
         );
 });

@@ -45,12 +45,12 @@ function handleSignUpButton(event) {
 function handleSignupAuth(event) {
     event.preventDefault();
     //get values from sign up form
-    const username = $('#email').val();
+    const email = $('#email').val();
     const password = $('#password').val();
     const confirmPassword = $('#password-confirm').val();
 
     // validate user inputs
-    if (username == '') alert('Must input username');
+    if (email == '') alert('Must input email');
     else if (password == '') alert('Must input password');
     else if (confirmPassword == '') alert('Must re-enter password');
     else if (password != confirmPassword) alert('Passwords do not match');
@@ -58,24 +58,26 @@ function handleSignupAuth(event) {
     else {
         // create the payload object (data sent to the api call)
         const newUserObject = {
-            username: username,
+            email: email,
             password: password
         };
         // TODO: Remove as soon as we have API auth
-        displayLoginPage();
+        // displayLoginPage();
         // make the api call using the payload above
-        /* $.ajax({
+        $.ajax({
             type: 'POST',
             url: '/api/users',
             dataType: 'json',
             data: JSON.stringify(newUserObject),
             contentType: 'application/json'
-        }).done(function() {
-            alert('Your account has been created, please login');
-            displayLoginPage();
-        }).fail(function(err) {
-            console.error(err);
-            alert(`Sign up error: ${err.responseJSON.message}`);
-        }); */
+        })
+            .done(function() {
+                alert('Your account has been created, please login');
+                displayLoginPage();
+            })
+            .fail(function(err) {
+                console.error(err);
+                alert(`Sign up error: ${err.responseJSON.message}`);
+            });
     }
 }

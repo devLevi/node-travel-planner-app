@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const travelPlanSchema = mongoose.Schema({
-    title: String,
-    seasonToGo: String,
-    description: String,
-    currency: String,
-    words: String,
-    todo: String
+    title: { type: String, required: true },
+    seasonToGo: { type: String, required: true },
+    description: { type: String, required: true },
+    currency: { type: String, required: true },
+    words: { type: String, required: true },
+    todo: { type: String, required: true },
+    email: { type: String, required: true }
 });
 
 travelPlanSchema.methods.serialize = function() {
@@ -20,7 +21,8 @@ travelPlanSchema.methods.serialize = function() {
         description: this.description,
         currency: this.currency,
         words: this.words,
-        todo: this.todo
+        todo: this.todo,
+        username: this.username
     };
 };
 

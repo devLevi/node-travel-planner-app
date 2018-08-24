@@ -32,7 +32,7 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/plans', plansRouter);
 
 // catch-all endpoint if client makes request to non-existent endpoint
