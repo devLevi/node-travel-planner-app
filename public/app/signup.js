@@ -61,8 +61,7 @@ function handleSignupAuth(event) {
             email: email,
             password: password
         };
-        // TODO: Remove as soon as we have API auth
-        // displayLoginPage();
+
         // make the api call using the payload above
         $.ajax({
             type: 'POST',

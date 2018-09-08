@@ -22,7 +22,7 @@ travelPlanSchema.methods.serialize = function() {
         currency: this.currency,
         words: this.words,
         todo: this.todo,
-        username: this.username
+        email: this.email
     };
 };
 
