@@ -1,3 +1,19 @@
-input {
-  width: 500px;
+* {
+  box-sizing: border-box;
+  font-family: 'Space Mono', monospace;
+  font-family: 'Eczar', serif;
+  /* text-align: center; */
+}
+
+body {
+  margin-left: 50px;
+  margin-top: 50px;
+}
+
+h1,
+h2,
+h3 {
+  color: black;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: purple;
 }

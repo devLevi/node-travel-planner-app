@@ -1,3 +1,7 @@
+'use strict';
+
+let jwt;
+
 setupLoginEventHandlers();
 
 function setupLoginEventHandlers() {
@@ -17,7 +21,7 @@ function renderLoginPage() {
 			<form role="form" class="login">
 				<fieldset name="login-info">
 					<div class="login-header">
-						<legend align="center">Log In</legend>
+						<legend align="left">Log In</legend>
 				    </div>
 				          <p id='notification'></p>
 					<label for="email" required>Email</label>
@@ -57,8 +61,6 @@ function handleLoginAuth(event) {
             password: password
         };
         console.log(loginUserObject);
-        // displayUserDashboard([]);
-        // TODO: Enable once we have API auth
         $.ajax({
             type: 'POST',
             url: '/api/auth/login',
@@ -70,10 +72,13 @@ function handleLoginAuth(event) {
                 jwt = data.authToken;
                 sessionStorage.setItem('authToken', jwt);
                 sessionStorage.setItem('email', loginUserObject.email);
+                console.log(jwt);
+                console.log(data);
+                console.log(loginUserObject.username);
                 getUserDashboard(loginUserObject.email);
             })
             .fail(function(err) {
-                console.error(err);
+                // console.error(err);
                 $('#notification').html(
                     'Login failed. Try again or click below to sign up!'
                 );
