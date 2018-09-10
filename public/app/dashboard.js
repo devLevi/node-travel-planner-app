@@ -1,5 +1,3 @@
-let jwt;
-
 setupDashboardEventHandlers();
 
 function setupDashboardEventHandlers() {
@@ -118,9 +116,8 @@ function getUserDashboard(user) {
         });
 }
 
-function displayAddEditPlan(plan = null) {
-    console.log(plan);
-    const planEditor = renderAddEditPlan(plan);
+function displayAddEditPlan() {
+    const planEditor = renderAddEditPlan();
     $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
     $('.main-area').html(planEditor);
@@ -176,7 +173,7 @@ function renderUserDashboard() {
         </section>`;
 }
 
-function renderAddEditPlan(plan = null) {
+function renderAddEditPlan(plan = {}) {
     return `
 		<div class="nav-bar">
 		<div class="nav-1">
@@ -195,37 +192,30 @@ function renderAddEditPlan(plan = null) {
 			<button class="cancel" id="js-cancel-button">Cancel</button>
 		</div>
 		<section class="edit-plan">
-			<div class="plan-title">
-				<input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" 
-				value="${plan.title}" required>
+            <div class="plan-title">
+            <h5>Where are you going?</h5>
+				<input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
 			</div>
-			<div class="plan-date">
-				<input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here"
-				value="${plan.seasonToGo}"}>
+            <div class="plan-date">
+                <h5>Season to go</h5>
+				<input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here" required>
 			</div>
-			<div class="plan-description">
+            <div class="plan-description">
+                <h5>Plan description</h5>
 				<input type="text" name="plan-description" id="country-description" 
-				placeholder="Add a short description of the country you want to visit here..." value="${
-    plan.description
-}">
+				placeholder="Add a short description of the country you want to visit here..." required>
             </div>
 			<div class="currency">
 				<h5>Currency information</h5>
-				<input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here" value="${
-    plan.currency
-}">
+				<input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here">
 			</div>
 			<div class="foreign-words">
 				<h5>Foreign words to know before you go</h5>
-				<input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." value="${
-    plan.words
-}">
+				<input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here...">
             </div>
             <div class="to-do">
             <h5>What do you want to do in this country?</h5>
-            <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" value="${
-    plan.todo
-}">
+            <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here">
             </div>
 		</section>
 		</form>	

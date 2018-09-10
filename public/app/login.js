@@ -17,22 +17,28 @@ function displayLoginPage() {
 
 function renderLoginPage() {
     return `
-		<section class="login-screen" aria-live="assertive">
-			<form role="form" class="login">
-				<fieldset name="login-info">
-					<div class="login-header">
-						<legend align="left">Log In</legend>
-				    </div>
-				          <p id='notification'></p>
-					<label for="email" required>Email</label>
-					<input type="email" name="email" id="email" placeholder="Email address" required="">
-					<label for="password" required>Password</label>
-					<input type="password" name="password" id="password" placeholder="Password" required>
-				</fieldset>
-				<button type="submit" class="js-login-button">Login</button>
-				<p>Don't have an account? <a href="" class ="nav-signup">Sign up</a></p>
-			</form>
-        </section>
+<section class="login-screen" aria-live="assertive">
+    <form role="form" class="login">
+        <fieldset name="login-info">
+            <div class="login-header">
+                <legend align="left">Log In</legend>
+            </div>
+            <p id='notification'></p>
+            <div class="input-field-container">
+                <label for="email" required>Email</label>
+                <br>    
+                <input type="email" name="email" id="email" placeholder="Email address" required="">
+            </div>
+            <div class="input-field-container">
+                <label for="password" required>Password</label>
+                <br>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+            </div>
+        </fieldset>
+        <button type="submit" class="js-login-button">Login</button>
+        <p>Don't have an account? <a href="" class="nav-signup">Sign up</a></p>
+    </form>
+</section>
     `;
 }
 
@@ -57,7 +63,7 @@ function handleLoginAuth(event) {
         // if the input is valid
         // create the payload object (what data we send to the api call)
         const loginUserObject = {
-            email: email,
+            username: email,
             password: password
         };
         console.log(loginUserObject);
@@ -71,14 +77,11 @@ function handleLoginAuth(event) {
             .done(function(data) {
                 jwt = data.authToken;
                 sessionStorage.setItem('authToken', jwt);
-                sessionStorage.setItem('email', loginUserObject.email);
-                console.log(jwt);
-                console.log(data);
-                console.log(loginUserObject.username);
-                getUserDashboard(loginUserObject.email);
+                sessionStorage.setItem('email', loginUserObject.username);
+                getUserDashboard(loginUserObject.username);
             })
             .fail(function(err) {
-                // console.error(err);
+                console.log(err);
                 $('#notification').html(
                     'Login failed. Try again or click below to sign up!'
                 );

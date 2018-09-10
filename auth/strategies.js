@@ -9,7 +9,9 @@ const { User } = require('../users');
 const { JWT_SECRET } = require('../config');
 
 const localStrategy = new LocalStrategy(
+    // { usernameField: 'email' },
     (username, password, passportVerify) => {
+        console.log(username);
         let user;
         User.findOne({ email: username })
             .then(_user => {

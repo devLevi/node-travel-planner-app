@@ -6,14 +6,36 @@
 }
 
 body {
-  margin-left: 50px;
-  margin-top: 50px;
+  margin: 20px;
 }
 
 h1,
 h2,
 h3 {
-  color: black;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: purple;
+  color: #0066ff;
+}
+
+.input-field-container {
+  clear: both;
+}
+
+a {
+  color: #ff6600;
+}
+input {
+  clear: both;
+}
+
+fieldset {
+  width: 90%;
+  border: 1px solid #0066ff;
+  border-radius: 2px;
+}
+
+legend {
+  font-size: 1.5em;
+  color: #0066ff;
+}
+
+button {
 }
