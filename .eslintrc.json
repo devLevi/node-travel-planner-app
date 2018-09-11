@@ -1,7 +1,8 @@
 {
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "browser": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -18,13 +19,15 @@
     "after": true,
     "describe": true,
     "document": true,
-    "sessionStorage": true
+    "sessionStorage": true,
+    "location": true
   },
   "rules": {
     "indent": ["error", 4],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
-    "no-console": 0
+    "no-console": ["warn", { "allow": ["error"] }],
+    "no-unused-vars": "warn"
   }
 }

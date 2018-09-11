@@ -1,328 +1,281 @@
-setupDashboardEventHandlers();
-
-function setupDashboardEventHandlers() {
-    $('.main-area').on(
-        'click',
-        '.my-countries-button',
-        handleMyCountriesButton
-    );
-    $('.main-area').on('click', '.js-edit-plan', handleAddEditButtons);
-    $('.main-area').on('click', '#js-edit-button', handleEditButton);
-    $('.main-area').on('submit', '#js-edit-form', handleSaveButton);
-    $('.main-area').on('click', '.plan-title a', handlePlanClick);
-    $('.main-area').on('click', '#js-cancel-button', handleCancelButton);
-    $('.main-area').on('click', '#js-delete-button', handleDeleteButton);
-    $('.main-area').on('click', '.js-logout-button', handleLogOutButton);
-    $('.home-button').on('click', handleHomeButton);
+// UTILS.js
+function getJWTFromStorage() {
+    return sessionStorage.getItem('authToken');
 }
 
-function handleMyCountriesButton(event) {
-    event.preventDefault();
+/**
+ * RENDER.js
+ */
+// Render Functions
+function renderLoginView() {
+    const loginPage = getLoginTemplate();
+    $('#main-page').html(loginPage);
     $('.landing-page').prop('hidden', true);
-    getUserDashboard();
 }
 
-function handleAddEditButtons(event) {
-    event.preventDefault();
-    displayAddEditPlan();
-}
-
-function handleEditButton() {
-    const id = $(this).data('planid');
-    getEachPlan(id, displayAddEditPlan);
-}
-
-function handleSaveButton(event) {
-    event.preventDefault();
-    let title = $('#country-title').val();
-    let seasonToGo = $('#travel-date').val();
-    let description = $('#country-description').val();
-    let currency = $('#plan-currency').val();
-    let words = $('#plan-foreign-words').val();
-    let todo = $('#plan-to-do').val();
-
-    if ($(this).data('planid') === undefined) {
-        createPlan(title, seasonToGo, description, currency, words, todo);
-    } else {
-        const id = $(this).data('planid');
-
-        const newPlan = {
-            id,
-            title,
-            seasonToGo,
-            description,
-            currency,
-            words,
-            todo
-        };
-        savePlan(newPlan);
-    }
-}
-
-function handlePlanClick() {
-    const id = $(this).data('planid');
-    getEachPlan(id, displayEachPlan);
-}
-
-function handleCancelButton() {
+function renderSignupView() {
+    const signupPage = getSignupTemplate();
     $('.landing-page').prop('hidden', true);
-    getUserDashboard();
+    $('#main-page').html(signupPage);
 }
 
-function handleDeleteButton() {
-    const id = $(this).data('planid');
-    const confirmDelete = alert('Are you sure you want to delete this?');
-    if (confirmDelete) {
-        deletePlan(id);
+// TODO: Call httpGetPlans before rendering Dashboard View, and render update function to render plans.
+
+function renderDashboardView(httpData) {
+    if (typeof httpData !== 'object') {
+        console.error(
+            'renderDashboard: argument "httpData" is undefined. This is probably because you called renderDashboardView directly instead of calling httpGetPlans first and letting that pass in the "httpData" argument.'
+        );
     }
-}
 
-function handleLogOutButton(event) {
-    event.preventDefault();
-    console.log('Logged out!');
-    jwt = null;
-    sessionStorage.clear();
-    location.reload();
-}
-
-function handleHomeButton() {
-    location.reload();
-}
-
-function displayUserDashboard(countryPlans) {
-    const userDashboard = renderUserDashboard(countryPlans);
     $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(userDashboard);
+    $('.main-area').html(getUserDashboardTemplate(httpData.plans));
 }
 
-function getUserDashboard(user) {
-    // displayUserDashboard();
-    // REMOVED AND UPDATE ONCE BACKEND IS COMPLETE
+function renderAddPlanView() {
+    $('.landing-page').prop('hidden', true);
+    $('.main-nav-bar').prop('hidden', true);
+    $('.main-area').html(getAddPlanTemplate());
+}
+
+// TODO: Add renderEditPlanView and getRenderPlanTemplate functions.
+
+// Template Functions
+function getUserDashboardTemplate(plans = []) {
+    let plansHtml;
+    if (plans.length > 0) {
+        plansHtml = plans.map(
+            plan => `
+            <h1>${plan.country}</h1>
+        `
+        );
+    } else {
+        plansHtml = `
+            <h4>Time to plan!</h4>
+        `;
+    }
+    return `
+        <div class="nav-bar">
+            <div class="nav-1">
+                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
+                <div class="nav-link"><a href="" class="js-logout-button">Log out</a></div>
+            </div>
+        </div>
+	
+        <main role="main" class="user-dashboard">
+            <div class="dashboard-header">
+                <h2>My trips</h2>
+            </div>
+            <section class='country-plans'>
+                ${plansHtml}
+                <div class="plan">
+                    <a href=""class="js-add-plan">Add a country</a>
+                </div>
+            </section>
+        </main>
+    `;
+}
+
+function getAddPlanTemplate() {
+    return `
+		<div class="nav-bar">
+            <div class="nav-1">
+                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
+                <div class="nav-link"><a href="" class="js-logout-button">Log Out</a></div>
+            </div>
+        </div>
+        
+        <main role="main" class="edit-country-plan">
+            <div class="dashboard-header">
+                <h2>Add New Country</h2>
+            </div>
+            <form id="js-add-plan-form" data-planid="">
+            <div class="save-delete">
+                <button type = "submit" class="save" id="js-save-button">Save</button>
+                <button class="cancel" id="js-cancel-button">Cancel</button>
+            </div>
+            <section class="edit-plan">
+                <div class="plan-title">
+                <h5>Where are you going?</h5>
+                    <input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
+                </div>
+                <div class="plan-date">
+                    <h5>Season to go</h5>
+                    <input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here" required>
+                </div>
+                <div class="plan-description">
+                    <h5>Plan description</h5>
+                    <input type="text" name="plan-description" id="country-description" 
+                    placeholder="Add a short description of the country you want to visit here..." required>
+                </div>
+                <div class="currency">
+                    <h5>Currency information</h5>
+                    <input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here">
+                </div>
+                <div class="foreign-words">
+                    <h5>Foreign words to know before you go</h5>
+                    <input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here...">
+                </div>
+                <div class="to-do">
+                <h5>What do you want to do in this country?</h5>
+                <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here">
+                </div>
+            </section>
+            </form>	
+        </main>
+	`;
+}
+
+function getLoginTemplate() {
+    return `
+        <section class="login-screen" aria-live="assertive">
+            <form role="form" class="login">
+                <fieldset name="login-info">
+                    <div class="login-header">
+                        <legend align="left">Log In</legend>
+                    </div>
+                    <p id='notification'></p>
+                    <div class="input-field-container">
+                        <label for="email" required>Email</label>
+                        <br>    
+                        <input type="email" name="email" id="email" placeholder="Email address" required="">
+                    </div>
+                    <div class="input-field-container">
+                        <label for="password" required>Password</label>
+                        <br>
+                        <input type="password" name="password" id="password" placeholder="Password" required>
+                    </div>
+                </fieldset>
+                <button type="submit" class="js-login-button">Login</button>
+                <p>Don't have an account? <a href="" class="nav-signup">Sign up</a></p>
+            </form>
+        </section>
+    `;
+}
+
+function getSignupTemplate() {
+    return `
+        <section class="signup-page-screen" aria-live="assertive">
+            <form role="form" class="signup">
+                <fieldset name="signup-info">
+                    <div class="login-header">
+                        <legend>Sign Up</legend>
+                    </div>
+                    <p id='notification'></p>
+                    <div class="input-field-container">
+                        <label for="email" required>Email</label>
+                        <br>
+                        <input type="email" name="email" id="email" placeholder="Email address" required="">
+                    </div>
+                    <div class="input-field-container">
+                        <label for="password" required>Password</label>
+                        <br> 
+                        <input type="password" name="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="input-field-container">
+                        <label for="password-confirm" required>Confirm password</label>
+                        <br>
+                        <input type="password" name="password" id="password-confirm" placeholder="Confirm password" required>
+                    </div>
+                </fieldset>
+                <button type="submit" class="js-signup-button">Sign up</button>
+                <p>Already have an account? <a href="" class="nav-login">Log in</p></a>
+            </form>
+        </section>
+	`;
+}
+
+/**
+ * HTTP.js
+ */
+function httpLogin(loginUserObject, callback) {
+    // Check all required function arguments are provided
+    if (typeof loginUserObject !== 'object') {
+        throw new Error(
+            'httpLogin: "loginUserObject" argument is not of type "object"'
+        );
+    }
+    if (typeof callback !== 'function') {
+        throw new Error(
+            'httpLogin: "callback" argument is not of type "function"'
+        );
+    }
+
     $.ajax({
-        type: 'GET',
-        url: '/api/plans',
+        type: 'POST',
+        url: '/api/auth/login',
         dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
+        data: JSON.stringify(loginUserObject),
+        contentType: 'application/json'
     })
-        .done(function(result) {
-            displayUserDashboard(result.plans);
+        .done(function(data) {
+            sessionStorage.setItem('authToken', data.authToken);
+            sessionStorage.setItem('email', loginUserObject.username);
+            callback(data);
         })
         .fail(function(err) {
-            console.err(err);
+            console.error(err);
+            $('#notification').html(
+                'Login failed. Try again or click below to sign up!'
+            );
         });
 }
 
-function displayAddEditPlan() {
-    const planEditor = renderAddEditPlan();
-    $('.landing-page').prop('hidden', true);
-    $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(planEditor);
-}
-
-function displayEachPlan(plan) {
-    const eachPlan = renderEachPlan(plan);
-    $('.landing-page').prop('hidden', true);
-    $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(eachPlan);
-}
-
-function getEachPlan(id, callback) {
-    console.log(id);
-    // countryPlansStorage.get(displayEachPlan, id);
+function httpSignup(newUserObject, callback) {
+    // Check all required function arguments are provided
+    if (typeof newUserObject !== 'object') {
+        throw new Error(
+            'httpSignup: "newUserObject" argument is not of type "object"'
+        );
+    }
+    if (typeof callback !== 'function') {
+        throw new Error(
+            'httpSignup: "callback" argument is not of type "function"'
+        );
+    }
     $.ajax({
-        type: 'GET',
-        url: `/api/plans/${id}`,
+        type: 'POST',
+        url: '/api/users',
         dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
-    })
-        .done(function(plan) {
-            callback(plan);
-        })
-        .fail(function(jqXHR, error, errorThrown) {
-            console.log(jqXHR);
-            console.log(error);
-            console.log(errorThrown);
-        });
-}
-
-function renderUserDashboard() {
-    return `
-	<div class="nav-bar">
-		<div class="nav-1">
-			<div class="nav-link"><a href="" class="my-countries-button">My Countries</a></div>
-			<div class="nav-link"><a href="" class="js-logout-button">Log out</a></div>
-		</div>
-	</div>
-	
-	<main role="main" class="user-dashboard">
-		<div class="dashboard-header">
-			<h2>My trips</h2>
-		</div>
-		<section class='country-plans'>
-			<h4>Time to plan!</h4>
-            <div class="plan">
-                <a href=""class="js-edit-plan">Add a country</a>
-            </div>
-        </section>`;
-}
-
-function renderAddEditPlan(plan = {}) {
-    return `
-		<div class="nav-bar">
-		<div class="nav-1">
-			<div class="nav-link"><a href="" class="my-countries-button">My Countries</a></div>
-			<div class="nav-link"><a href="" class="js-logout-button">Log Out</a></div>
-		</div>
-	</div>
-	
-	<main role="main" class="edit-country-plan">
-		<div class="dashboard-header">
-			<h2>Edit My Country</h2>
-		</div>
-		<form id="js-edit-form" data-planid="${plan.id}">
-		<div class="save-delete">
-			<button type = "submit" class="save" id="js-save-button">Save</button>
-			<button class="cancel" id="js-cancel-button">Cancel</button>
-		</div>
-		<section class="edit-plan">
-            <div class="plan-title">
-            <h5>Where are you going?</h5>
-				<input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
-			</div>
-            <div class="plan-date">
-                <h5>Season to go</h5>
-				<input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here" required>
-			</div>
-            <div class="plan-description">
-                <h5>Plan description</h5>
-				<input type="text" name="plan-description" id="country-description" 
-				placeholder="Add a short description of the country you want to visit here..." required>
-            </div>
-			<div class="currency">
-				<h5>Currency information</h5>
-				<input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here">
-			</div>
-			<div class="foreign-words">
-				<h5>Foreign words to know before you go</h5>
-				<input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here...">
-            </div>
-            <div class="to-do">
-            <h5>What do you want to do in this country?</h5>
-            <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here">
-            </div>
-		</section>
-		</form>	
-	</main>
-	`;
-}
-
-function renderEachPlan(plan) {
-    return `
-		<div class="nav-bar">
-		<div class="nav-1">
-			<div class="nav-link"><a href="" class="my-countries-button">My Journal</a></div>
-			<div class="nav-link"><a href="" class="js-edit-plan plus">&#43;</a></div>
-			<div class="nav-link"><a href="" class="js-logout-button">Log Out</a></div>
-		</div>
-		</div>
-		<main role="main" class="country-plan">
-		<div class="dashboard-header">
-			<h2>My Countries</h2>
-		</div>
-		<div class="edit-delete">
-			<button class="edit" id="js-edit-button" data-planid="${plan.id}">EDIT</button>
-			<button class="delete" id="js-delete-button" data-planid="${
-    plan.id
-}">DELETE</button>
-		</div>
-		<section class="each-plan">
-			<div class="plan-title">
-				<h5 class="plan-title">${plan.title}</h5>
-			</div>
-			<p class="plan-date">${plan.seasonToGo}</p>
-			<div class="main-plan-description">
-				<p class="p-plan" id="p-plan">${plan.description}</p>		
-			</div>
-			<div class="main-currency">
-				<h5>Currency information</h5>
-				<p class="p-plan" id="js-memory"> 
-					${plan.currency}
-				</p>	
-			</div>
-			<div class="main-foreign-words">
-				<h5>Foreign words to know before you go</h5>
-				<p class="p-plan">
-					${plan.words}
-				</p>
-            </div>
-            <div class="main-foreign-words">
-            <h5>What do you want to do in this country?</h5>
-            <p class="p-plan">
-                ${plan.todo}
-            </p>
-        </div>
-		</section>	
-	</main>
-	`;
-}
-
-//DELETE button
-function deletePlan(id) {
-    // countryPlansStorage.delete(getUserDashboard, id);
-
-    $.ajax({
-        type: 'DELETE',
-        url: `/api/plans/${id}`,
-        dataType: 'json',
-        contentType: 'application/json',
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
-    })
-        //if call is succefull
-        .done(function() {
-            getUserDashboard();
-        })
-        //if the call is failing
-        .fail(function(jqXHR, error, errorThrown) {
-            console.log(jqXHR);
-            console.log(error);
-            console.log(errorThrown);
-        });
-}
-
-// SAVE BUTTON
-
-function savePlan(newPlan) {
-    //countryPlansStorage.update(getUserDashboard, newPlan);
-    $.ajax({
-        type: 'PUT',
-        url: `/api/plans/${newPlan.id}`,
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(newPlan),
-        headers: {
-            Authorization: `Bearer ${jwt}`
-        }
+        data: JSON.stringify(newUserObject),
+        contentType: 'application/json'
     })
         .done(function() {
-            getUserDashboard();
+            alert('Your account has been created, please login');
+            callback();
         })
-        .fail(function(jqXHR, error, errorThrown) {
-            console.error(jqXHR);
-            console.error(error);
-            console.error(errorThrown);
+        .fail(function(err) {
+            console.error(err);
+            alert(`Sign up error: ${err.responseJSON.message}`);
         });
 }
 
-function createPlan(title, seasonToGo, description, currency, words, todo) {
+function httpCreatePlan(planObject, jwt, callback) {
+    // Check all required function arguments are provided
+    if (typeof planObject !== 'object') {
+        throw new Error(
+            'httpCreatePlan: "planObject" argument is not of type "object"'
+        );
+    }
+    if (typeof jwt !== 'string') {
+        throw new Error(
+            'httpCreatePlan: "jwt" argument is not of type "string"'
+        );
+    }
+    if (typeof callback !== 'function') {
+        throw new Error(
+            'httpCreatePlan: "callback" argument is not of type "function"'
+        );
+    }
+    const {
+        title,
+        seasonToGo,
+        description,
+        currency,
+        words,
+        todo
+    } = planObject;
     const newPlan = {
         title,
         seasonToGo,
@@ -343,11 +296,177 @@ function createPlan(title, seasonToGo, description, currency, words, todo) {
         }
     })
         .done(function() {
-            getUserDashboard();
+            callback();
         })
         .fail(function(jqXHR, error, errorThrown) {
+            alert('An error ocurred (see console)');
             console.error(jqXHR);
             console.error(error);
             console.error(errorThrown);
         });
+}
+
+function httpGetPlans(jwt, callback) {
+    // Check all required function arguments are provided
+    if (typeof jwt !== 'string') {
+        throw new Error('httpGetPlans: "jwt" argument is not of type "string"');
+    }
+    if (typeof callback !== 'function') {
+        throw new Error(
+            'httpGetPlans: "callback" argument is not of type "function"'
+        );
+    }
+    $.ajax({
+        type: 'GET',
+        url: '/api/plans',
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+        .done(function(data) {
+            callback(data);
+        })
+        .fail(function(err) {
+            console.error(err);
+        });
+}
+
+setupAppEventHandlers();
+
+function setupAppEventHandlers() {
+    // Login
+    $('.main-area').on('click', '.nav-login', onShowLoginViewBtnClick);
+    $('.main-area').on('submit', '.login', onLoginFormSubmit);
+    // Signup
+    $('.main-area').on('click', '.nav-signup', onShowSignupViewBtnClick);
+    $('.main-area').on('submit', '.signup', onSignupFormSubmit);
+    // Dashboard
+    $('.main-area').on(
+        'click',
+        '.js-show-dashboard',
+        onShowDashboardViewBtnClick
+    );
+    $('.main-area').on('click', '.js-add-plan', onAddPlanBtnClick);
+    $('.main-area').on('submit', '#js-add-plan-form', onAddPlanFormSubmit);
+    $('.main-area').on('click', '#js-cancel-button', onCancelBtnClick);
+    $('.main-area').on('click', '.js-logout-button', onLogoutBtnClick);
+
+    // Skip login and jump to dashboard if logged in.
+    const authToken = getJWTFromStorage();
+    if (typeof authToken === 'string') {
+        httpGetPlans(getJWTFromStorage(), renderDashboardView);
+    }
+}
+
+// EVENT HANDLERS
+
+// event handlers that show views
+function onShowLoginViewBtnClick(event) {
+    event.preventDefault();
+    renderLoginView();
+}
+
+function onShowSignupViewBtnClick(event) {
+    event.preventDefault();
+    renderSignupView();
+}
+
+function onShowDashboardViewBtnClick(event) {
+    event.preventDefault();
+    $('.landing-page').prop('hidden', true);
+    httpGetPlans(getJWTFromStorage(), renderDashboardView);
+}
+
+function onAddPlanBtnClick(event) {
+    event.preventDefault();
+    renderAddPlanView();
+}
+
+function onCancelBtnClick() {
+    $('.landing-page').prop('hidden', true);
+    renderDashboardView();
+}
+
+function onLogoutBtnClick(event) {
+    event.preventDefault();
+    alert('Logging out...');
+    sessionStorage.clear();
+    location.reload();
+}
+
+// event handlers that handle form actions
+function onLoginFormSubmit(event) {
+    event.preventDefault();
+    // Get the inputs from the user in Log In form
+    const email = $('#email').val();
+    const password = $('#password').val();
+
+    // validate the input
+    if (email == '') {
+        alert('Please input user name');
+    } else if (password == '') {
+        alert('Please input password');
+    } else {
+        // if the input is valid
+        // create the payload object (what data we send to the api call)
+        const loginUserObject = {
+            username: email,
+            password: password
+        };
+        httpLogin(loginUserObject, data => {
+            httpGetPlans(getJWTFromStorage(), renderDashboardView);
+        });
+    }
+}
+
+function onSignupFormSubmit(event) {
+    event.preventDefault();
+    //get values from sign up form
+    const email = $('#email').val();
+    const password = $('#password').val();
+    const confirmPassword = $('#password-confirm').val();
+
+    // validate user inputs
+    if (email == '') alert('Must input email');
+    else if (password == '') alert('Must input password');
+    else if (confirmPassword == '') alert('Must re-enter password');
+    else if (password != confirmPassword) alert('Passwords do not match');
+    // if valid
+    else {
+        // create the payload object (data sent to the api call)
+        const newUserObject = {
+            email: email,
+            password: password
+        };
+        // make the api call using the payload above
+        httpSignup(newUserObject, renderLoginView);
+    }
+}
+
+function onAddPlanFormSubmit(event) {
+    event.preventDefault();
+    let title = $('#country-title').val();
+    let seasonToGo = $('#travel-date').val();
+    let description = $('#country-description').val();
+    let currency = $('#plan-currency').val();
+    let words = $('#plan-foreign-words').val();
+    let todo = $('#plan-to-do').val();
+
+    // FIXME: Plan creation is not working, throws a server side error.
+    httpCreatePlan(
+        {
+            title,
+            seasonToGo,
+            description,
+            currency,
+            words,
+            todo
+        },
+        getJWTFromStorage(),
+        () => {
+            httpGetPlans(getJWTFromStorage(), renderDashboardView);
+        }
+    );
 }
