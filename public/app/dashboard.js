@@ -19,8 +19,6 @@ function renderSignupView() {
     $('#main-page').html(signupPage);
 }
 
-// TODO: Call httpGetPlans before rendering Dashboard View, and render update function to render plans.
-
 function renderDashboardView(httpData) {
     if (typeof httpData !== 'object') {
         console.error(
@@ -42,12 +40,20 @@ function renderAddPlanView() {
 // TODO: Add renderEditPlanView and getRenderPlanTemplate functions.
 
 // Template Functions
+function renderEditPlanView() {
+    $('.landing-page').prop('hidden', true);
+    $('.main-nav-bar').prop('hidden', true);
+    $('.main-area').html(getRenderPlanTemplate());
+}
+
+function getRenderPlanTemplate() {}
+
 function getUserDashboardTemplate(plans = []) {
     let plansHtml;
     if (plans.length > 0) {
         plansHtml = plans.map(
             plan => `
-            <h1>${plan.country}</h1>
+            <h1>${plan.title}</h1>
         `
         );
     } else {
@@ -86,7 +92,7 @@ function getAddPlanTemplate() {
             </div>
         </div>
         
-        <main role="main" class="edit-country-plan">
+        <main role="main" class="add-country-plan">
             <div class="dashboard-header">
                 <h2>Add New Country</h2>
             </div>
@@ -95,7 +101,7 @@ function getAddPlanTemplate() {
                 <button type = "submit" class="save" id="js-save-button">Save</button>
                 <button class="cancel" id="js-cancel-button">Cancel</button>
             </div>
-            <section class="edit-plan">
+            <section class="add-plan">
                 <div class="plan-title">
                 <h5>Where are you going?</h5>
                     <input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
@@ -350,6 +356,7 @@ function setupAppEventHandlers() {
     );
     $('.main-area').on('click', '.js-add-plan', onAddPlanBtnClick);
     $('.main-area').on('submit', '#js-add-plan-form', onAddPlanFormSubmit);
+    $('.main-area').on('submit', '#js-add-plan-form', onEditPlanBtnClick);
     $('.main-area').on('click', '#js-cancel-button', onCancelBtnClick);
     $('.main-area').on('click', '.js-logout-button', onLogoutBtnClick);
 
@@ -382,6 +389,11 @@ function onShowDashboardViewBtnClick(event) {
 function onAddPlanBtnClick(event) {
     event.preventDefault();
     renderAddPlanView();
+}
+
+function onEditPlanBtnClick(event) {
+    event.preventDefault();
+    renderEditPlanView();
 }
 
 function onCancelBtnClick() {
@@ -448,13 +460,12 @@ function onSignupFormSubmit(event) {
 function onAddPlanFormSubmit(event) {
     event.preventDefault();
     let title = $('#country-title').val();
-    let seasonToGo = $('#travel-date').val();
+    let seasonToGo = $('#season-to-go').val();
     let description = $('#country-description').val();
     let currency = $('#plan-currency').val();
     let words = $('#plan-foreign-words').val();
     let todo = $('#plan-to-do').val();
 
-    // FIXME: Plan creation is not working, throws a server side error.
     httpCreatePlan(
         {
             title,
