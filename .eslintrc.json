@@ -28,6 +28,7 @@
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
     "no-console": ["warn", { "allow": ["error"] }],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "max-len": "off"
   }
 }

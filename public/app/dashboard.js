@@ -37,24 +37,87 @@ function renderAddPlanView() {
     $('.main-area').html(getAddPlanTemplate());
 }
 
-// TODO: Add renderEditPlanView and getRenderPlanTemplate functions.
-
-// Template Functions
-function renderEditPlanView() {
+function renderEditPlanView(httpData) {
     $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
-    $('.main-area').html(getRenderPlanTemplate());
+    // eslint-disable-next-line
+    debugger;
+    $('.main-area').html(getRenderPlanTemplate(httpData.plans[0]));
+}
+// TODO: Add renderEditPlanView and getRenderPlanTemplate function.
+// Template Functions
+
+function getRenderPlanTemplate(plan) {
+    return `
+    <div class="nav-bar">
+            <div class="nav-1">
+                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
+                <div class="nav-link"><a href="" class="js-logout-button">Log out</a></div>
+            </div>
+        </div>
+	
+        <main role="main" class="edit-country-plan">
+            <div class="dashboard-header">
+                <h2>Edit Plan</h2>
+            </div>
+            <form id="js-edit-plan-form" data-planid="${plan.id}">
+            <div class="save-delete">
+                <button type = "submit" class="save" id="js-save-button">Save</button>
+                <button class="cancel" id="js-cancel-button">Cancel</button>
+            </div>
+            <section class="edit-plan">
+                <div class="plan-title">
+                <h5>Country</h5>
+                    <input type="text" name="country-title" id="country-title" value=" ${
+    plan.title
+}" maxlength="100" type="text" required>
+                </div>
+                <div class="plan-date">
+                    <h5>Season to go</h5>
+                    <input type="text" name="season-to-go" id="season-to-go" value="${
+    plan.seasonToGo
+}" required>
+                </div>
+                <div class="plan-description">
+                    <h5>Plan description</h5>
+                    <input type="text" name="plan-description" id="country-description" 
+                    value="${plan.description}" required>
+                </div>
+                <div class="currency">
+                    <h5>Currency information</h5>
+                    <input type="text" name="currency" id="plan-currency" value="${
+    plan.currency
+}">
+                </div>
+                <div class="foreign-words">
+                    <h5>Foreign words</h5>
+                    <input type="text" name="foreign-words" id="plan-foreign-words" value="${
+    plan.words
+}">
+                </div>
+                <div class="to-do">
+                <h5>Things to do</h5>
+                <input type="text" name="to-do" id="plan-to-do" value="${
+    plan.todo
+}">
+                </div>
+            </section>
+            </form>	
+        </main>
+        `;
 }
 
-function getRenderPlanTemplate() {}
-
+//Step 1
 function getUserDashboardTemplate(plans = []) {
     let plansHtml;
     if (plans.length > 0) {
         plansHtml = plans.map(
             plan => `
-            <h1>${plan.title}</h1>
-        `
+            <h1>${plan.title} </h1> 
+            <button type=button class="js-edit-button" data-plan-id="${
+    plan.id
+}">Edit</button>
+            `
         );
     } else {
         plansHtml = `
@@ -312,6 +375,40 @@ function httpCreatePlan(planObject, jwt, callback) {
         });
 }
 
+//TODO: FIX THIS FUNCTION
+function httpGetOnePlan(planId, jwt, callback) {
+    if (typeof planId !== 'string') {
+        throw new Error(
+            'httpGetOnePlan: "planId" argument is not of type "string"'
+        );
+    }
+    if (typeof jwt !== 'string') {
+        throw new Error(
+            'httpGetOnePlan: "jwt" argument is not of type "string"'
+        );
+    }
+    if (typeof callback !== 'function') {
+        throw new Error(
+            'httpGetOnePlan: "callback" argument is not of type "function"'
+        );
+    }
+    $.ajax({
+        type: 'GET',
+        url: `/api/plans/${planId}`,
+        dataType: 'json',
+        contentType: 'application/json',
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+        .done(function(data) {
+            callback(data);
+        })
+        .fail(function(err) {
+            console.error(err);
+        });
+}
+
 function httpGetPlans(jwt, callback) {
     // Check all required function arguments are provided
     if (typeof jwt !== 'string') {
@@ -356,7 +453,8 @@ function setupAppEventHandlers() {
     );
     $('.main-area').on('click', '.js-add-plan', onAddPlanBtnClick);
     $('.main-area').on('submit', '#js-add-plan-form', onAddPlanFormSubmit);
-    $('.main-area').on('submit', '#js-add-plan-form', onEditPlanBtnClick);
+    //TODO: Hook up onEditPlansBtnClick
+    $('.main-area').on('click', '.js-edit-button', onEditPlanBtnClick);
     $('.main-area').on('click', '#js-cancel-button', onCancelBtnClick);
     $('.main-area').on('click', '.js-logout-button', onLogoutBtnClick);
 
@@ -393,7 +491,9 @@ function onAddPlanBtnClick(event) {
 
 function onEditPlanBtnClick(event) {
     event.preventDefault();
-    renderEditPlanView();
+    const planId = $(event.currentTarget).attr('data-plan-id');
+    const authToken = getJWTFromStorage();
+    httpGetOnePlan(planId, authToken, renderEditPlanView);
 }
 
 function onCancelBtnClick() {
@@ -480,4 +580,9 @@ function onAddPlanFormSubmit(event) {
             httpGetPlans(getJWTFromStorage(), renderDashboardView);
         }
     );
+}
+
+//FIXME: Put reu
+function onEditPlanFormSubmit(event) {
+    event.preventDefault();
 }

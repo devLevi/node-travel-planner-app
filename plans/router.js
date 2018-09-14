@@ -46,9 +46,25 @@ router.post('/', (req, res) => {
         });
 });
 
-//GET request
+//GET requests
+//Get all plans
 router.get('/', (req, res) => {
     TravelPlan.find() // REMOVED USERNAME REQ
+        .then(plans => {
+            res.json({
+                plans: plans.map(plan => plan.serialize())
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({ message: 'Internal server error' });
+        });
+});
+
+router.get('/:id', (req, res) => {
+    TravelPlan.find({
+        _id: req.params.id
+    })
         .then(plans => {
             res.json({
                 plans: plans.map(plan => plan.serialize())
