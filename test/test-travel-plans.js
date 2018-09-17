@@ -115,17 +115,29 @@ describe('travel plans API resource', function() {
         });
 
         it('should return travel plans with right fields', function() {
+            const token = jsonwebtoken.sign(
+                {
+                    user: { email }
+                },
+                JWT_SECRET,
+                {
+                    algorithm: 'HS256',
+                    subject: email,
+                    expiresIn: '7d'
+                }
+            );
             let resPlan;
             return chai
                 .request(app)
                 .get('/api/plans')
+                .set('authorization', `Bearer ${token}`)
                 .then(function(res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
-                    expect(res.body).to.be.a('array');
-                    expect(res.body).to.be.lengthOf.at.least(1);
+                    expect(res.body.plans).to.be.a('array');
+                    expect(res.body.plans).to.be.lengthOf.at.least(1);
 
-                    res.body.forEach(function(plan) {
+                    res.body.plans.forEach(function(plan) {
                         expect(plan).to.be.a('object');
                         expect(plan).to.include.keys(
                             'id',
@@ -139,7 +151,7 @@ describe('travel plans API resource', function() {
                     });
                     // just check one of the plans that its values match with those in db
                     // and we'll assume it's true for rest
-                    resPlan = res.body[0];
+                    resPlan = res.body.plans[0];
                     return TravelPlan.findById(resPlan.id);
                 })
                 .then(plan => {
@@ -159,11 +171,22 @@ describe('travel plans API resource', function() {
         // 2. Prove that the plan we get back has right keys
         // 3. Make sure it has id
         it('should add a new travel plan', function() {
+            const token = jsonwebtoken.sign(
+                {
+                    user: { email }
+                },
+                JWT_SECRET,
+                {
+                    algorithm: 'HS256',
+                    subject: email,
+                    expiresIn: '7d'
+                }
+            );
             const newPlan = generateTravelPlanData();
             return chai
                 .request(app)
                 .post('/api/plans')
-                .set('Authorization', `Bearer ${jwt}`)
+                .set('Authorization', `Bearer ${token}`)
                 .send(newPlan)
                 .then(function(res) {
                     expect(res).to.have.status(201);
@@ -200,6 +223,17 @@ describe('travel plans API resource', function() {
         //  2. Make a PUT request to update that post
         //  4. Prove post in db is correctly updated
         it('should update fields you send over', function() {
+            const token = jsonwebtoken.sign(
+                {
+                    user: { email }
+                },
+                JWT_SECRET,
+                {
+                    algorithm: 'HS256',
+                    subject: email,
+                    expiresIn: '7d'
+                }
+            );
             const updateData = {
                 title: 'Costa Pica',
                 seasonToGo: 'anytime',
@@ -209,15 +243,13 @@ describe('travel plans API resource', function() {
                 words: 'words',
                 todo: 'do stuff'
             };
-
             return TravelPlan.findOne()
                 .then(plan => {
                     updateData.id = plan.id;
-
                     return chai
                         .request(app)
                         .put(`/api/plans/${plan.id}`)
-                        .set('Authorization', `Bearer ${jwt}`)
+                        .set('Authorization', `Bearer ${token}`)
                         .send(updateData);
                 })
                 .then(res => {
@@ -242,22 +274,32 @@ describe('travel plans API resource', function() {
         //  3. assert that response has right status code
         //  4. prove that plan with the id doesn't exist in db anymore
         it('should delete a travel plan by id', function() {
+            const token = jsonwebtoken.sign(
+                {
+                    user: { email }
+                },
+                JWT_SECRET,
+                {
+                    algorithm: 'HS256',
+                    subject: email,
+                    expiresIn: '7d'
+                }
+            );
             let plan;
-
             return TravelPlan.findOne()
                 .then(_plan => {
                     plan = _plan;
                     return chai
                         .request(app)
                         .delete(`/api/plans/${plan.id}`)
-                        .set('Authorization', `Bearer ${jwt}`);
+                        .set('Authorization', `Bearer ${token}`);
                 })
                 .then(res => {
                     expect(res).to.have.status(204);
                     return TravelPlan.findById(plan.id);
                 })
                 .then(_plan => {
-                    expect(_plan).to.exist;
+                    expect(_plan).to.not.exist;
                 });
         });
     });

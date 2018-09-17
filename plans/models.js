@@ -9,8 +9,8 @@ const travelPlanSchema = mongoose.Schema({
     description: { type: String, required: true },
     currency: { type: String, required: true },
     words: { type: String, required: true },
-    todo: { type: String, required: true }
-    // email: { type: String, required: true }
+    todo: { type: String, required: true },
+    email: { type: String, required: true }
 });
 
 travelPlanSchema.methods.serialize = function() {
@@ -21,8 +21,8 @@ travelPlanSchema.methods.serialize = function() {
         description: this.description,
         currency: this.currency,
         words: this.words,
-        todo: this.todo
-        // email: this.email
+        todo: this.todo,
+        email: this.email
     };
 };
 
