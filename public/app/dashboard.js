@@ -40,19 +40,16 @@ function renderAddPlanView() {
 function renderEditPlanView(httpData) {
     $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
-    // eslint-disable-next-line
-    debugger;
     $('.main-area').html(getRenderPlanTemplate(httpData.plans[0]));
 }
-// TODO: Add renderEditPlanView and getRenderPlanTemplate function.
-// Template Functions
 
+// Template Functions
 function getRenderPlanTemplate(plan) {
     return `
     <div class="nav-bar">
             <div class="nav-1">
                 <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" class="js-logout-button">Log out</a></div>
+                <div class="nav-link"><a href="" id="js-logout-button">Log out</a></div>
             </div>
         </div>
 	
@@ -114,7 +111,7 @@ function getUserDashboardTemplate(plans = []) {
         plansHtml = plans.map(
             plan => `
             <h1>${plan.title} </h1> 
-            <button type=button class="js-edit-button" data-plan-id="${
+            <button type=button id="js-edit-button" data-plan-id="${
     plan.id
 }">Edit</button>
             `
@@ -128,7 +125,7 @@ function getUserDashboardTemplate(plans = []) {
         <div class="nav-bar">
             <div class="nav-1">
                 <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" class="js-logout-button">Log out</a></div>
+                <div class="nav-link"><a href="" id="js-logout-button">Log out</a></div>
             </div>
         </div>
 	
@@ -139,7 +136,7 @@ function getUserDashboardTemplate(plans = []) {
             <section class='country-plans'>
                 ${plansHtml}
                 <div class="plan">
-                    <a href=""class="js-add-plan">Add a country</a>
+                    <a href=""id="js-add-plan">Add a country</a>
                 </div>
             </section>
         </main>
@@ -151,7 +148,7 @@ function getAddPlanTemplate() {
 		<div class="nav-bar">
             <div class="nav-1">
                 <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" class="js-logout-button">Log Out</a></div>
+                <div class="nav-link"><a href="" id="js-logout-button">Log Out</a></div>
             </div>
         </div>
         
@@ -199,7 +196,7 @@ function getAddPlanTemplate() {
 function getLoginTemplate() {
     return `
         <section class="login-screen" aria-live="assertive">
-            <form role="form" class="login">
+            <form role="form" id="login">
                 <fieldset name="login-info">
                     <div class="login-header">
                         <legend align="left">Log In</legend>
@@ -217,7 +214,7 @@ function getLoginTemplate() {
                     </div>
                 </fieldset>
                 <button type="submit" class="js-login-button">Login</button>
-                <p>Don't have an account? <a href="" class="nav-signup">Sign up</a></p>
+                <p>Don't have an account? <a href="" id="nav-signup">Sign up</a></p>
             </form>
         </section>
     `;
@@ -226,7 +223,7 @@ function getLoginTemplate() {
 function getSignupTemplate() {
     return `
         <section class="signup-page-screen" aria-live="assertive">
-            <form role="form" class="signup">
+            <form role="form" id="signup">
                 <fieldset name="signup-info">
                     <div class="login-header">
                         <legend>Sign Up</legend>
@@ -249,7 +246,7 @@ function getSignupTemplate() {
                     </div>
                 </fieldset>
                 <button type="submit" class="js-signup-button">Sign up</button>
-                <p>Already have an account? <a href="" class="nav-login">Log in</p></a>
+                <p>Already have an account? <a href="" id="nav-login">Log in</p></a>
             </form>
         </section>
 	`;
@@ -321,22 +318,6 @@ function httpSignup(newUserObject, callback) {
 }
 
 function httpCreatePlan(planObject, jwt, callback) {
-    // Check all required function arguments are provided
-    if (typeof planObject !== 'object') {
-        throw new Error(
-            'httpCreatePlan: "planObject" argument is not of type "object"'
-        );
-    }
-    if (typeof jwt !== 'string') {
-        throw new Error(
-            'httpCreatePlan: "jwt" argument is not of type "string"'
-        );
-    }
-    if (typeof callback !== 'function') {
-        throw new Error(
-            'httpCreatePlan: "callback" argument is not of type "function"'
-        );
-    }
     const {
         title,
         seasonToGo,
@@ -375,7 +356,6 @@ function httpCreatePlan(planObject, jwt, callback) {
         });
 }
 
-//TODO: FIX THIS FUNCTION
 function httpGetOnePlan(planId, jwt, callback) {
     if (typeof planId !== 'string') {
         throw new Error(
@@ -436,27 +416,62 @@ function httpGetPlans(jwt, callback) {
         });
 }
 
+function httpUpdatePlan(planObject, planId, jwt, callback) {
+    const {
+        title,
+        seasonToGo,
+        description,
+        currency,
+        words,
+        todo
+    } = planObject;
+    const editedPlan = {
+        title,
+        seasonToGo,
+        description,
+        currency,
+        words,
+        todo
+    };
+
+    $.ajax({
+        method: 'PUT',
+        url: `/api/plans/${planId}`,
+        data: JSON.stringify(editedPlan),
+        headers: {
+            Authorization: `Bearer ${jwt}`
+        }
+    })
+        .done(function(data) {
+            callback(data);
+        })
+        .fail(function(err) {
+            console.error(err);
+        });
+}
+
 setupAppEventHandlers();
 
 function setupAppEventHandlers() {
     // Login
-    $('.main-area').on('click', '.nav-login', onShowLoginViewBtnClick);
-    $('.main-area').on('submit', '.login', onLoginFormSubmit);
+    $('.main-area').on('click', '#nav-login', onShowLoginViewBtnClick);
+    $('.main-area').on('submit', '#login', onLoginFormSubmit);
     // Signup
-    $('.main-area').on('click', '.nav-signup', onShowSignupViewBtnClick);
-    $('.main-area').on('submit', '.signup', onSignupFormSubmit);
+    $('.main-area').on('click', '#nav-signup', onShowSignupViewBtnClick);
+    $('.main-area').on('submit', '#signup', onSignupFormSubmit);
     // Dashboard
     $('.main-area').on(
         'click',
         '.js-show-dashboard',
         onShowDashboardViewBtnClick
     );
-    $('.main-area').on('click', '.js-add-plan', onAddPlanBtnClick);
+    $('.main-area').on('click', '#js-add-plan', onAddPlanBtnClick);
     $('.main-area').on('submit', '#js-add-plan-form', onAddPlanFormSubmit);
-    //TODO: Hook up onEditPlansBtnClick
-    $('.main-area').on('click', '.js-edit-button', onEditPlanBtnClick);
+    $('.main-area').on('click', '#js-edit-button', onEditPlanBtnClick);
+    $('.main-area').on('submit', '#js-edit-plan-form', onEditPlanFormSubmit);
+    $('.main-area').on('click', '#js-save-button', onEditPlanFormSubmit);
     $('.main-area').on('click', '#js-cancel-button', onCancelBtnClick);
-    $('.main-area').on('click', '.js-logout-button', onLogoutBtnClick);
+    $('.main-area').on('click', '#js-logout-button', onLogoutBtnClick);
 
     // Skip login and jump to dashboard if logged in.
     const authToken = getJWTFromStorage();
@@ -495,6 +510,20 @@ function onEditPlanBtnClick(event) {
     const authToken = getJWTFromStorage();
     httpGetOnePlan(planId, authToken, renderEditPlanView);
 }
+
+//FIXME:
+// function onSaveBtnClick(event) {
+//     event.preventDefault();
+//     const planId = $(event.currentTarget).attr('data-plan-id');
+//     const authToken = getJWTFromStorage();
+//     const planObject = httpUpdatePlan(
+//         planObject,
+//         planId,
+//         authToken,
+//         renderDashboardView
+//     );
+//     onEditPlanFormSubmit;
+// }
 
 function onCancelBtnClick() {
     $('.landing-page').prop('hidden', true);
@@ -582,7 +611,30 @@ function onAddPlanFormSubmit(event) {
     );
 }
 
-//FIXME: Put reu
+//FIXME:
 function onEditPlanFormSubmit(event) {
     event.preventDefault();
+    const planId = $(event.currentTarget).attr('data-plan-id');
+    // const authToken = getJWTFromStorage();
+    let title = $('#country-title').val();
+    let seasonToGo = $('#season-to-go').val();
+    let description = $('#country-description').val();
+    let currency = $('#plan-currency').val();
+    let words = $('#plan-foreign-words').val();
+    let todo = $('#plan-to-do').val();
+    httpUpdatePlan(
+        {
+            title,
+            seasonToGo,
+            description,
+            currency,
+            words,
+            todo
+        },
+        planId,
+        getJWTFromStorage(),
+        () => {
+            httpGetPlans(getJWTFromStorage(), renderDashboardView);
+        }
+    );
 }
