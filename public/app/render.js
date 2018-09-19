@@ -37,61 +37,65 @@ function renderEditPlanView(httpData) {
 function getRenderPlanTemplate(plan) {
     return `
     <div class="nav-bar">
-            <div class="nav-1">
-                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" id="js-logout-button">Log out</a></div>
-            </div>
-        </div>
-	
-        <main role="main" class="edit-country-plan">
-            <div class="dashboard-header">
-                <h2>Edit Plan</h2>
-            </div>
-            <form id="js-edit-plan-form" data-plan-id="${plan.id}">
-            <div class="save-delete">
-                <button type = "submit" class="save" id="js-save-button">Save</button>
-                <button class="cancel" id="js-cancel-button">Cancel</button>
-            </div>
-            <section class="edit-plan">
-                <div class="plan-title">
+    <ul class="nav-1">
+        <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
+        <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+        <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
+    </ul>
+</div>
+
+<main role="main" class="edit-country-plan">
+    <div class="dashboard-header">
+        <h2>Edit Plan</h2>
+    </div>
+    <form id="js-edit-plan-form" data-plan-id="${plan.id}">
+        <section class="edit-plan">
+            <div class="plan-title">
                 <h5>Country</h5>
-                    <input type="text" name="country-title" id="country-title" value=" ${
+                <input type="text" name="country-title" id="country-title" value=" ${
     plan.title
-}" maxlength="100" type="text" required>
-                </div>
-                <div class="plan-date">
-                    <h5>Season to go</h5>
-                    <input type="text" name="season-to-go" id="season-to-go" value="${
+}" maxlength="100"
+                    type="text" required>
+            </div>
+            <div class="plan-date">
+                <h5>Season to go</h5>
+                <input type="text" name="season-to-go" id="season-to-go" value="${
     plan.seasonToGo
 }" required>
-                </div>
-                <div class="plan-description">
-                    <h5>Plan description</h5>
-                    <input type="text" name="plan-description" id="country-description" 
-                    value="${plan.description}" required>
-                </div>
-                <div class="currency">
-                    <h5>Currency information</h5>
-                    <input type="text" name="currency" id="plan-currency" value="${
+            </div>
+            <div class="plan-description">
+                <h5>Plan description</h5>
+                <input type="text" name="plan-description" id="country-description" value="${
+    plan.description
+}"
+                    required>
+            </div>
+            <div class="currency">
+                <h5>Currency information</h5>
+                <input type="text" name="currency" id="plan-currency" value="${
     plan.currency
 }">
-                </div>
-                <div class="foreign-words">
-                    <h5>Foreign words</h5>
-                    <input type="text" name="foreign-words" id="plan-foreign-words" value="${
+            </div>
+            <div class="foreign-words">
+                <h5>Foreign words</h5>
+                <input type="text" name="foreign-words" id="plan-foreign-words" value="${
     plan.words
 }">
-                </div>
-                <div class="to-do">
+            </div>
+            <div class="to-do">
                 <h5>Things to do</h5>
                 <input type="text" name="to-do" id="plan-to-do" value="${
     plan.todo
 }">
-                </div>
-            </section>
-            </form>	
-        </main>
-        `;
+            </div>
+        </section>
+        <div class="save-cancel">
+            <button type="submit" class="save" id="js-save-button">Save</button>
+            <button class="cancel" id="js-cancel-button">Cancel</button>
+        </div>
+    </form>
+</main>
+`;
 }
 
 function getUserDashboardTemplate(plans = []) {
@@ -116,10 +120,12 @@ function getUserDashboardTemplate(plans = []) {
     }
     return `
         <div class="nav-bar">
-            <div class="nav-1">
-                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" id="js-logout-button">Log out</a></div>
-            </div>
+            <ul class="nav-1">
+                <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
+                <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+                <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
+                <li class="plan"><a href=""id="js-add-plan">Add Country</a></li>
+            </ul>
         </div>
 	
         <main role="main" class="user-dashboard">
@@ -128,9 +134,6 @@ function getUserDashboardTemplate(plans = []) {
             </div>
             <section class='country-plans'>
                 ${plansHtml.join('')}
-                <div class="plan">
-                    <a href=""id="js-add-plan">Add a country</a>
-                </div>
             </section>
         </main>
     `;
@@ -139,10 +142,11 @@ function getUserDashboardTemplate(plans = []) {
 function getAddPlanTemplate() {
     return `
 		<div class="nav-bar">
-            <div class="nav-1">
-                <div class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></div>
-                <div class="nav-link"><a href="" id="js-logout-button">Log Out</a></div>
-            </div>
+            <ul class="nav-1">
+                <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
+                <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+                <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
+            </ul>
         </div>
         
         <main role="main" class="add-country-plan">
@@ -150,10 +154,6 @@ function getAddPlanTemplate() {
                 <h2>Add New Country</h2>
             </div>
             <form id="js-add-plan-form" data-planid="">
-            <div class="save-delete">
-                <button type = "submit" class="save" id="js-save-button">Save</button>
-                <button class="cancel" id="js-cancel-button">Cancel</button>
-            </div>
             <section class="add-plan">
                 <div class="plan-title">
                 <h5>Where are you going?</h5>
@@ -181,6 +181,10 @@ function getAddPlanTemplate() {
                 <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" required>
                 </div>
             </section>
+            <div class="save-cancel">
+                <button type = "submit" class="save" id="js-save-button">Save</button>
+                <button class="cancel" id="js-cancel-button">Cancel</button>
+            </div>
             </form>	
         </main>
 	`;
@@ -198,12 +202,12 @@ function getLoginTemplate() {
                     <div class="input-field-container">
                         <label for="email" required>Email</label>
                         <br>    
-                        <input type="email" name="email" id="email" placeholder="Email address" required="">
+                        <input type="email" name="email" id="email" required="">
                     </div>
                     <div class="input-field-container">
                         <label for="password" required>Password</label>
                         <br>
-                        <input type="password" name="password" id="password" placeholder="Password" required>
+                        <input type="password" name="password" id="password" required>
                     </div>
                 </fieldset>
                 <button type="submit" class="js-login-button">Login</button>
