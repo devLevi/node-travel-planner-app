@@ -1,12 +1,10 @@
 function renderLoginView() {
     const loginPage = getLoginTemplate();
     $('#main-page').html(loginPage);
-    $('.landing-page').prop('hidden', true);
 }
 
 function renderSignupView() {
     const signupPage = getSignupTemplate();
-    $('.landing-page').prop('hidden', true);
     $('#main-page').html(signupPage);
 }
 
@@ -16,20 +14,16 @@ function renderDashboardView(httpData) {
             'renderDashboard: argument "httpData" is undefined. This is probably because you called renderDashboardView directly instead of calling httpGetPlans first and letting that pass in the "httpData" argument.'
         );
     }
-
-    $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
     $('.main-area').html(getUserDashboardTemplate(httpData.plans));
 }
 
 function renderAddPlanView() {
-    $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
     $('.main-area').html(getAddPlanTemplate());
 }
 
 function renderEditPlanView(httpData) {
-    $('.landing-page').prop('hidden', true);
     $('.main-nav-bar').prop('hidden', true);
     $('.main-area').html(getRenderPlanTemplate(httpData.plans[0]));
 }
@@ -204,12 +198,12 @@ function getLoginTemplate() {
                     <div class="input-field-container">
                         <label for="email" required>Email</label>
                         <br>    
-                        <input type="email" name="email" id="email" required="">
+                        <input type="email" name="email" id="email" value="test@test.com" required="">
                     </div>
                     <div class="input-field-container">
                         <label for="password" required>Password</label>
                         <br>
-                        <input type="password" name="password" id="password" required>
+                        <input type="password" name="password" id="password" value="newpassword" required>
                     </div>
                 </fieldset>
                 <br>
@@ -232,7 +226,7 @@ function getSignupTemplate() {
             <div class="input-field-container">
                 <label for="email" required>Email</label>
                 <br>
-                <input type="email" name="email" id="email" required>
+                <input type="email" name="email" id="email" value="login to test!" required>
             </div>
             <div class="input-field-container">
                 <label for="password" required>Password</label>

@@ -1,6 +1,8 @@
 setupAppEventHandlers();
 
 function setupAppEventHandlers() {
+    //Page Load
+    $(window).on('load', onShowSignupViewPageLoad);
     // Login
     $('.main-area').on('click', '#nav-login', onShowLoginViewBtnClick);
     $('.main-area').on('submit', '#login', onLoginFormSubmit);
@@ -29,6 +31,12 @@ function setupAppEventHandlers() {
 }
 
 // event handlers that show views
+
+function onShowSignupViewPageLoad(event) {
+    event.preventDefault();
+    renderSignupView();
+}
+
 function onShowLoginViewBtnClick(event) {
     event.preventDefault();
     renderLoginView();
