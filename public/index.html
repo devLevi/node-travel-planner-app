@@ -8,6 +8,7 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kavivanar" rel="stylesheet">
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/all.js" integrity="sha384-xymdQtn1n3lH2wcu0qhcdaOpQwyoarkgLVxC/wZ5q7h9gHtxICrpcaSUfygqZGOe"
         crossorigin="anonymous"></script>
     <meta charset="utf-8">
@@ -18,9 +19,10 @@
 </head>
 
 <body>
-    <header role="banner">
+    <header role="banner" id="banner">
         <div class="banner-container">
-            <img src="/images/tripbook-banner-short2.png" alt="tripbook banner" class="tripbook-banner">
+            <img src="/images/tripbook-banner-map.png" alt="tripbook banner" class="tripbook-banner">
+            <h3 class="subtitle">Easily plan vacations and trips</h3>
         </div>
     </header>
     <div class="main-area">
@@ -42,16 +44,33 @@
 
         <main role="main" id="main-page">
             <div class="landing-page">
-                <section class="website-description">
-                    <h3>Easily plan vacations and trips</h3>
-                    <p>Identify and fill out a short form for each country you plan to go to</p>
-                    <div class="img-container">
-                        <!-- <img src="..." class="landing-page-photos"> -->
-                    </div>
-                    <div class="scrolltop">
-                        <a class="scroll" href="#banner" aria-label="return to the top of the page">
-                            <i class="fas fa-angle-double-up"></i>
-                        </a>
+                <section class="signup-page-screen" aria-live="assertive">
+                    <form role="form" id="signup">
+                        <fieldset name="signup-info">
+                            <div class="login-header">
+                                <legend>Sign Up</legend>
+                            </div>
+                            <p id='notification'></p>
+                            <div class="input-field-container">
+                                <label for="email" required>Email</label>
+                                <br>
+                                <input type="email" name="email" id="email" required>
+                            </div>
+                            <div class="input-field-container">
+                                <label for="password" required>Password</label>
+                                <br>
+                                <input type="password" name="password" id="password" required>
+                            </div>
+                            <div class="input-field-container">
+                                <label for="password-confirm" required>Confirm Password</label>
+                                <br>
+                                <input type="password" name="password" id="password-confirm" required>
+                            </div>
+                        </fieldset>
+                        <br>
+                        <button type="submit" class="js-signup-button">Sign up</button>
+                        <p>Already have an account? <a href="" id="nav-login">Log in</p></a>
+                    </form>
                 </section>
             </div>
         </main>

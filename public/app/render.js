@@ -39,14 +39,14 @@ function getRenderPlanTemplate(plan) {
     <div class="nav-bar">
     <ul class="nav-1">
         <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
-        <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+        <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
         <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
     </ul>
 </div>
 
 <main role="main" class="edit-country-plan">
     <div class="dashboard-header">
-        <h2>Edit Plan</h2>
+        <h2>Edit Trip</h2>
     </div>
     <form id="js-edit-plan-form" data-plan-id="${plan.id}">
         <section class="edit-plan">
@@ -89,6 +89,7 @@ function getRenderPlanTemplate(plan) {
 }">
             </div>
         </section>
+        <br>
         <div class="save-cancel">
             <button type="submit" class="save" id="js-save-button">Save</button>
             <button class="cancel" id="js-cancel-button">Cancel</button>
@@ -103,10 +104,10 @@ function getUserDashboardTemplate(plans = []) {
     if (plans.length > 0) {
         plansHtml = plans.map(
             plan => `
-            <h1>${plan.title} </h1> 
+            <h1 class="plans-title">${plan.title} </h1> 
             <button type=button id="js-edit-button" data-plan-id="${
     plan.id
-}">Edit</button>
+}">View</button>
 <br>
 <button type="button" id="js-delete-button" data-plan-id="${
     plan.id
@@ -122,15 +123,15 @@ function getUserDashboardTemplate(plans = []) {
         <div class="nav-bar">
             <ul class="nav-1">
                 <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
-                <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+                <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
                 <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
-                <li class="plan"><a href=""id="js-add-plan">Add Country</a></li>
+                <li class="plan"><a href=""id="js-add-plan">Add Trip</a></li>
             </ul>
         </div>
 	
         <main role="main" class="user-dashboard">
             <div class="dashboard-header">
-                <h2>My trips</h2>
+                <h2 class="trips-title">My Trips</h2>
             </div>
             <section class='country-plans'>
                 ${plansHtml.join('')}
@@ -144,14 +145,14 @@ function getAddPlanTemplate() {
 		<div class="nav-bar">
             <ul class="nav-1">
                 <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
-                <li class="nav-link"><a href="" class="js-show-dashboard">My Countries</a></li>
+                <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
                 <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
             </ul>
         </div>
         
         <main role="main" class="add-country-plan">
             <div class="dashboard-header">
-                <h2>Add New Country</h2>
+                <h2>Add New Trip</h2>
             </div>
             <form id="js-add-plan-form" data-planid="">
             <section class="add-plan">
@@ -181,6 +182,7 @@ function getAddPlanTemplate() {
                 <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" required>
                 </div>
             </section>
+            <br>
             <div class="save-cancel">
                 <button type = "submit" class="save" id="js-save-button">Save</button>
                 <button class="cancel" id="js-cancel-button">Cancel</button>
@@ -210,6 +212,7 @@ function getLoginTemplate() {
                         <input type="password" name="password" id="password" required>
                     </div>
                 </fieldset>
+                <br>
                 <button type="submit" class="js-login-button">Login</button>
                 <p>Don't have an account? <a href="" id="nav-signup">Sign up</a></p>
             </form>
@@ -219,32 +222,33 @@ function getLoginTemplate() {
 
 function getSignupTemplate() {
     return `
-        <section class="signup-page-screen" aria-live="assertive">
-            <form role="form" id="signup">
-                <fieldset name="signup-info">
-                    <div class="login-header">
-                        <legend>Sign Up</legend>
-                    </div>
-                    <p id='notification'></p>
-                    <div class="input-field-container">
-                        <label for="email" required>Email</label>
-                        <br>
-                        <input type="email" name="email" id="email" placeholder="Email address" required="">
-                    </div>
-                    <div class="input-field-container">
-                        <label for="password" required>Password</label>
-                        <br> 
-                        <input type="password" name="password" id="password" placeholder="Password" required>
-                    </div>
-                    <div class="input-field-container">
-                        <label for="password-confirm" required>Confirm password</label>
-                        <br>
-                        <input type="password" name="password" id="password-confirm" placeholder="Confirm password" required>
-                    </div>
-                </fieldset>
-                <button type="submit" class="js-signup-button">Sign up</button>
-                <p>Already have an account? <a href="" id="nav-login">Log in</p></a>
-            </form>
-        </section>
+    <section class="signup-page-screen" aria-live="assertive">
+    <form role="form" id="signup">
+        <fieldset name="signup-info">
+            <div class="login-header">
+                <legend>Sign Up</legend>
+            </div>
+            <p id='notification'></p>
+            <div class="input-field-container">
+                <label for="email" required>Email</label>
+                <br>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="input-field-container">
+                <label for="password" required>Password</label>
+                <br>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <div class="input-field-container">
+                <label for="password-confirm" required>Confirm Password</label>
+                <br>
+                <input type="password" name="password" id="password-confirm" required>
+            </div>
+        </fieldset>
+        <br>
+        <button type="submit" class="js-signup-button">Sign up</button>
+        <p>Already have an account? <a href="" id="nav-login">Log in</p></a>
+    </form>
+</section>
 	`;
 }
