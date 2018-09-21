@@ -40,44 +40,44 @@ function getRenderPlanTemplate(plan) {
 
 <main role="main" class="edit-country-plan">
     <div class="dashboard-header">
-        <h2>Edit Trip</h2>
+        <h2>Trip Details</h2>
     </div>
     <form id="js-edit-plan-form" data-plan-id="${plan.id}">
         <section class="edit-plan">
             <div class="plan-title">
-                <h5>Country</h5>
+                <h5 class="input-title-header">Country</h5>
                 <input type="text" name="country-title" id="country-title" value=" ${
     plan.title
 }" maxlength="100"
                     type="text" required>
             </div>
             <div class="plan-date">
-                <h5>Season to go</h5>
-                <input type="text" name="season-to-go" id="season-to-go" value="${
+                <h5 class="input-title-header">Season to go</h5>
+                <textarea col="50" rows="8" name="season-to-go" id="season-to-go" value="${
     plan.seasonToGo
-}" required>
+}" required>${plan.seasonToGo}</textarea>
             </div>
             <div class="plan-description">
-                <h5>Plan description</h5>
-                <input type="text" name="plan-description" id="country-description" value="${
+                <h5 class="input-title-header">Plan description</h5>
+                <input type="text" name="plan-description" id="plan-description" value="${
     plan.description
 }"
                     required>
             </div>
             <div class="currency">
-                <h5>Currency information</h5>
+                <h5 class="input-title-header">Currency information</h5>
                 <input type="text" name="currency" id="plan-currency" value="${
     plan.currency
 }">
             </div>
             <div class="foreign-words">
-                <h5>Foreign words</h5>
+                <h5 class="input-title-header">Foreign words</h5>
                 <input type="text" name="foreign-words" id="plan-foreign-words" value="${
     plan.words
 }">
             </div>
             <div class="to-do">
-                <h5>Things to do</h5>
+                <h5 class="input-title-header">Things to do</h5>
                 <input type="text" name="to-do" id="plan-to-do" value="${
     plan.todo
 }">
@@ -98,6 +98,7 @@ function getUserDashboardTemplate(plans = []) {
     if (plans.length > 0) {
         plansHtml = plans.map(
             plan => `
+            <div class="plans-container">
             <h1 class="plans-title">${plan.title} </h1> 
             <button type=button id="js-edit-button" data-plan-id="${
     plan.id
@@ -106,6 +107,7 @@ function getUserDashboardTemplate(plans = []) {
 <button type="button" id="js-delete-button" data-plan-id="${
     plan.id
 }">Delete</button> 
+</div>
             `
         );
     } else {
@@ -151,28 +153,28 @@ function getAddPlanTemplate() {
             <form id="js-add-plan-form" data-planid="">
             <section class="add-plan">
                 <div class="plan-title">
-                <h5>Where are you going?</h5>
+                <h5 class="input-title-header">Where are you going?</h5>
                     <input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
                 </div>
                 <div class="plan-date">
-                    <h5>Season to go</h5>
+                    <h5 class="input-title-header">Season to go</h5>
                     <input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here" required>
                 </div>
                 <div class="plan-description">
-                    <h5>Plan description</h5>
+                    <h5 class="input-title-header">Plan description</h5>
                     <input type="text" name="plan-description" id="country-description" 
                     placeholder="Add a short description of the country you want to visit here..." required>
                 </div>
                 <div class="currency">
-                    <h5>Currency information</h5>
+                    <h5 class="input-title-header">Currency information</h5>
                     <input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here" required>
                 </div>
                 <div class="foreign-words">
-                    <h5>Foreign words to know before you go</h5>
+                    <h5 class="input-title-header">Foreign words to know before you go</h5>
                     <input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." required>
                 </div>
                 <div class="to-do">
-                <h5>What do you want to do in this country?</h5>
+                <h5 class="input-title-header">What do you want to do in this country?</h5>
                 <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" required>
                 </div>
             </section>
