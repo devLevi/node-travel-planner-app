@@ -1,3 +1,10 @@
 language: node_js
 node_js: node
 services: mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: zuNXPY6Twd62+f5mOmsXkm5939zpQ8m9np7nTUJWxYqz5gdv6IyKK977rqxLYY1Yr6D2QBQOaAUU4W6MI1UE/HFJzvMGWGeZZ4iMZU8ehLGivBBzyy66NhYd3R/bQASht08hJu8dc9eCR0zgIt6KxwaPbko4O9mkkR6ICx5//rBYLzkWP57azahRF2ocUdbltSkCrqDjRegwdm4+F7s6GBi3KAh8YhHvjNp4S6q9pUIQJIwQOJB0ahCRWKt2LQh8EvWYJeAu3nwmOW9LL9D+FgCL9oUrnggSWMVqfhvbl7Ytw54BTYRTySVo/uwe0tOWxJTdddEM3Unp6iDIGvNJbpB//MeNEPpOg/mOeUg8IDT3Ucpk/A2C3CON8d1xa4f8S0nL8Fe23HiGWGA9yT+ffj+EXbI48p/NyciXjo2WXHHlg4Bd1eZs21mfYzGFw1MSS8MJ9DUs2QqEBlV0pWD9Ku55fohZCiVT+xS8Ojf3Ey1yHZGEMMWcKjJ+SKCHzmsm6qVESunMHxKQapvN0+5FUW6Vaw4k6alzy6t+k3zhq4bXZ/xlNxCH2JiDAh5D6xJxkdclDMiqc5sjCDp7gNmWPP9w0VmwIAr5W+OG8MEiSHmyUR5fOaulgabngDQ4zNw33uwum1lK++mR4U2/Iri4Fm2IM2F+IDkWlL/bXpTH1nw=
+  app: nameless-springs-39856
+  on:
+    repo: devLevi/node-travel-planner-app
