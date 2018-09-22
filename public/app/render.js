@@ -46,10 +46,10 @@ function getRenderPlanTemplate(plan) {
         <section class="edit-plan">
             <div class="plan-title">
                 <h5 class="input-title-header">Country</h5>
-                <input type="text" name="country-title" id="country-title" value=" ${
+                <textarea col="50" rows="8" name="country-title" id="country-title" value=" ${
     plan.title
 }" maxlength="100"
-                    type="text" required>
+                    type="text" required>${plan.title}</textarea>
             </div>
             <div class="plan-date">
                 <h5 class="input-title-header">Season to go</h5>
@@ -59,28 +59,28 @@ function getRenderPlanTemplate(plan) {
             </div>
             <div class="plan-description">
                 <h5 class="input-title-header">Plan description</h5>
-                <input type="text" name="plan-description" id="plan-description" value="${
+                <textarea col="50" rows="8" name="plan-description" id="plan-description" value="${
     plan.description
 }"
-                    required>
+                    required>${plan.description}</textarea>
             </div>
             <div class="currency">
                 <h5 class="input-title-header">Currency information</h5>
-                <input type="text" name="currency" id="plan-currency" value="${
+                <textarea col="50" rows="8" name="currency" id="plan-currency" value="${
     plan.currency
-}">
+}" required>${plan.currency}</textarea>
             </div>
             <div class="foreign-words">
                 <h5 class="input-title-header">Foreign words</h5>
-                <input type="text" name="foreign-words" id="plan-foreign-words" value="${
+                <textarea col="50" rows="8" name="foreign-words" id="plan-foreign-words" value="${
     plan.words
-}">
+}" required>${plan.words}</textarea>
             </div>
             <div class="to-do">
                 <h5 class="input-title-header">Things to do</h5>
-                <input type="text" name="to-do" id="plan-to-do" value="${
+                <textarea col="50" rows="8" name="to-do" id="plan-to-do" value="${
     plan.todo
-}">
+}" required>${plan.todo}</textarea>
             </div>
         </section>
         <br>
@@ -154,28 +154,27 @@ function getAddPlanTemplate() {
             <section class="add-plan">
                 <div class="plan-title">
                 <h5 class="input-title-header">Where are you going?</h5>
-                    <input type="text" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>
+                   <textarea col="50" rows="8" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>Where are you going?</textarea>
                 </div>
                 <div class="plan-date">
                     <h5 class="input-title-header">Season to go</h5>
-                    <input type="text" name="season-to-go" id="season-to-go" placeholder="List the best season to travel here" required>
+                   <textarea col="50" rows="8" name="season-to-go" id="season-to-go" required>When is the best time of year to go?</textarea>
                 </div>
                 <div class="plan-description">
                     <h5 class="input-title-header">Plan description</h5>
-                    <input type="text" name="plan-description" id="country-description" 
-                    placeholder="Add a short description of the country you want to visit here..." required>
+                   <textarea col="50" rows="8" name="plan-description" id="country-description" required>Why do you want to go here?</textarea>
                 </div>
                 <div class="currency">
                     <h5 class="input-title-header">Currency information</h5>
-                    <input type="text" name="currency" id="plan-currency" placeholder="List the name of the currency and the conversion rate from USD here" required>
+                   <textarea col="50" rows="8" name="currency" id="plan-currency" required>Currency name and exchange rate</textarea>
                 </div>
                 <div class="foreign-words">
                     <h5 class="input-title-header">Foreign words to know before you go</h5>
-                    <input type="text" name="foreign-words" id="plan-foreign-words" placeholder="Add foreign words with their pronounciation and meanings here..." required>
+                   <textarea col="50" rows="8" name="foreign-words" id="plan-foreign-words" required>Foreign words to know before you go</textarea>
                 </div>
                 <div class="to-do">
                 <h5 class="input-title-header">What do you want to do in this country?</h5>
-                <input type="text" name="to-do" id="plan-to-do" placeholder="List the things you want to do in this country here" required>
+               <textarea col="50" rows="8" name="to-do" id="plan-to-do" required>What are you planning to do?</textarea>
                 </div>
             </section>
             <br>
