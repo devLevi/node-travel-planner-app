@@ -130,7 +130,7 @@ function getUserDashboardTemplate(plans = []) {
                 <h2 class="trips-title">My Trips</h2>
             </div>
             <section class='country-plans'>
-                ${plansHtml.join('')}
+                ${plansHtml.Array.prototype.join.call('')}
             </section>
         </main>
     `;
