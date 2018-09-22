@@ -96,30 +96,31 @@ function getRenderPlanTemplate(plan) {
 function getUserDashboardTemplate(plans = []) {
     let plansHtml;
     if (plans.length > 0) {
-        (plansHtml = plans.map(
+        plansHtml = plans.map(
             plan => `
             <div class="plans-container">
             <h1 class="plans-title">${plan.title} </h1> 
             <button type=button id="js-edit-button" data-plan-id="${
-            plan.id
-            }">View</button>
+    plan.id
+}">View</button>
 <br>
 <button type="button" id="js-delete-button" data-plan-id="${
-            plan.id
-            }">Delete</button> 
+    plan.id
+}">Delete</button> 
 </div>
             `
-        )),
-        dashboardWithPlansHtml(plansHtml);
+        );
     } else {
-        (plansHtml = `
+        plansHtml = [
+            `
     <h4>Time to plan!</h4>
-`),
-        dashoboardWithoutPlansHtml(plansHtml);
+`
+        ];
     }
+    return dashboardHtml(plansHtml);
 }
 
-function dashboardWithPlansHtml(plansHtml) {
+function dashboardHtml(plansHtml) {
     `        <div class="nav-bar">
     <ul class="nav-1">
         <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
@@ -138,28 +139,6 @@ function dashboardWithPlansHtml(plansHtml) {
     </section>
 </main>
 `;
-}
-
-function dashoboardWithoutPlansHtml(plansHtml) {
-    `
-        <div class="nav-bar">
-            <ul class="nav-1">
-                <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
-                <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
-                <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
-                <li class="plan"><a href=""id="js-add-plan">Add Trip</a></li>
-            </ul>
-        </div>
-	
-        <main role="main" class="user-dashboard">
-            <div class="dashboard-header">
-                <h2 class="trips-title">My Trips</h2>
-            </div>
-            <section class='country-plans'>
-                ${plansHtml}
-            </section>
-        </main>
-    `;
 }
 
 function getAddPlanTemplate() {
