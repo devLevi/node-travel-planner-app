@@ -112,7 +112,7 @@ function getUserDashboardTemplate(plans = []) {
         );
         dashboardHtml(plansHtml);
     } else {
-        return `
+        `
             <h4>Time to plan!</h4>
         `;
     }
