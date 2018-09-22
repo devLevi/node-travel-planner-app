@@ -110,15 +110,16 @@ function getUserDashboardTemplate(plans = []) {
 </div>
             `
         );
-        dashboardHtml(plansHtml);
+        dashboardWithPlansHtml(plansHtml);
     } else {
-        `
-            <h4>Time to plan!</h4>
-        `;
+        plansHtml = `
+    <h4>Time to plan!</h4>
+`;
+        dashoboardWithoutPlansHtml(plansHtml);
     }
 }
 
-function dashboardHtml(plansHtml) {
+function dashboardWithPlansHtml(plansHtml) {
     `        <div class="nav-bar">
     <ul class="nav-1">
         <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
@@ -137,6 +138,28 @@ function dashboardHtml(plansHtml) {
     </section>
 </main>
 `;
+}
+
+function dashoboardWithoutPlansHtml(plansHtml) {
+    `
+        <div class="nav-bar">
+            <ul class="nav-1">
+                <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
+                <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
+                <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
+                <li class="plan"><a href=""id="js-add-plan">Add Trip</a></li>
+            </ul>
+        </div>
+	
+        <main role="main" class="user-dashboard">
+            <div class="dashboard-header">
+                <h2 class="trips-title">My Trips</h2>
+            </div>
+            <section class='country-plans'>
+                ${plansHtml}
+            </section>
+        </main>
+    `;
 }
 
 function getAddPlanTemplate() {
