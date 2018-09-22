@@ -17,6 +17,7 @@ function setupAppEventHandlers() {
     );
     $('.main-area').on('click', '#js-add-plan', onAddPlanBtnClick);
     $('.main-area').on('submit', '#js-add-plan-form', onAddPlanFormSubmit);
+    $('.main-area').on('click', '#js-view-plan', onPlanTitleClick);
     $('.main-area').on('click', '#js-edit-button', onEditPlanBtnClick);
     $('.main-area').on('click', '#js-delete-button', onDeletePlanBtnClick);
     $('.main-area').on('submit', '#js-edit-plan-form', onEditPlanFormSubmit);
@@ -84,6 +85,13 @@ function onLogoutBtnClick(event) {
     alert('Logging out...');
     sessionStorage.clear();
     location.reload();
+}
+
+function onPlanTitleClick(event) {
+    event.preventDefault();
+    const planId = $(event.currentTarget).attr('data-plan-id');
+    const authToken = getJWTFromStorage();
+    httpGetOnePlan(planId, authToken, renderPlanView);
 }
 
 // event handlers that handle form actions
