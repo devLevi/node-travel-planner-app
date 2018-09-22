@@ -96,7 +96,7 @@ function getRenderPlanTemplate(plan) {
 function getUserDashboardTemplate(plans = []) {
     let plansHtml;
     if (plans.length > 0) {
-        plansHtml = plans.map(
+        plansHtml = plans.map.join(
             plan => `
             <div class="plans-container">
             <h1 class="plans-title">${plan.title} </h1> 
@@ -111,9 +111,11 @@ function getUserDashboardTemplate(plans = []) {
             `
         );
     } else {
-        plansHtml = `
+        plansHtml = [
+            `
             <h4>Time to plan!</h4>
-        `;
+        `
+        ];
     }
     return `
         <div class="nav-bar">
@@ -130,7 +132,7 @@ function getUserDashboardTemplate(plans = []) {
                 <h2 class="trips-title">My Trips</h2>
             </div>
             <section class='country-plans'>
-                ${plansHtml.Array.prototype.join.call('')}
+                ${plansHtml}
             </section>
         </main>
     `;
