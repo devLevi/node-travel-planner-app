@@ -176,7 +176,7 @@ textarea input {
     clear: none;
   }
 
-  input {
+  textarea input {
     clear: both;
     background-color: #f4f8ff;
     margin: 5px;

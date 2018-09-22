@@ -46,39 +46,39 @@ function getRenderPlanTemplate(plan) {
         <section class="edit-plan">
             <div class="plan-title">
                 <h5 class="input-title-header">Country</h5>
-                <textarea col="50" rows="8" name="country-title" id="country-title" value=" ${
+                <textarea col="100" rows="8" name="country-title" id="country-title" value=" ${
     plan.title
 }" maxlength="100"
                     type="text" required>${plan.title}</textarea>
             </div>
             <div class="plan-date">
                 <h5 class="input-title-header">Season to go</h5>
-                <textarea col="50" rows="8" name="season-to-go" id="season-to-go" value="${
+                <textarea col="100" rows="8" name="season-to-go" id="season-to-go" value="${
     plan.seasonToGo
 }" required>${plan.seasonToGo}</textarea>
             </div>
             <div class="plan-description">
                 <h5 class="input-title-header">Plan description</h5>
-                <textarea col="50" rows="8" name="plan-description" id="plan-description" value="${
+                <textarea col="100" rows="8" name="plan-description" id="plan-description" value="${
     plan.description
 }"
                     required>${plan.description}</textarea>
             </div>
             <div class="currency">
                 <h5 class="input-title-header">Currency information</h5>
-                <textarea col="50" rows="8" name="currency" id="plan-currency" value="${
+                <textarea col="100" rows="8" name="currency" id="plan-currency" value="${
     plan.currency
 }" required>${plan.currency}</textarea>
             </div>
             <div class="foreign-words">
                 <h5 class="input-title-header">Foreign words</h5>
-                <textarea col="50" rows="8" name="foreign-words" id="plan-foreign-words" value="${
+                <textarea col="100" rows="8" name="foreign-words" id="plan-foreign-words" value="${
     plan.words
 }" required>${plan.words}</textarea>
             </div>
             <div class="to-do">
                 <h5 class="input-title-header">Things to do</h5>
-                <textarea col="50" rows="8" name="to-do" id="plan-to-do" value="${
+                <textarea col="100" rows="8" name="to-do" id="plan-to-do" value="${
     plan.todo
 }" required>${plan.todo}</textarea>
             </div>
@@ -110,30 +110,33 @@ function getUserDashboardTemplate(plans = []) {
 </div>
             `
         );
+        dashboardHtml(plansHtml);
     } else {
-        plansHtml = `
+        return `
             <h4>Time to plan!</h4>
         `;
     }
-    return `
-        <div class="nav-bar">
-            <ul class="nav-1">
-                <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
-                <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
-                <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
-                <li class="plan"><a href=""id="js-add-plan">Add Trip</a></li>
-            </ul>
-        </div>
-	
-        <main role="main" class="user-dashboard">
-            <div class="dashboard-header">
-                <h2 class="trips-title">My Trips</h2>
-            </div>
-            <section class='country-plans'>
-                ${plansHtml}
-            </section>
-        </main>
-    `;
+}
+
+function dashboardHtml(plansHtml) {
+    `        <div class="nav-bar">
+    <ul class="nav-1">
+        <li class="nav-link home-icon"><a href=""><i class="fa fa-home"></i></a></li>
+        <li class="nav-link"><a href="" class="js-show-dashboard">My Trips</a></li>
+        <li class="nav-link"><a href="" id="js-logout-button">Log Out</a></li>
+        <li class="plan"><a href=""id="js-add-plan">Add Trip</a></li>
+    </ul>
+</div>
+
+<main role="main" class="user-dashboard">
+    <div class="dashboard-header">
+        <h2 class="trips-title">My Trips</h2>
+    </div>
+    <section class='country-plans'>
+        ${plansHtml.join('')}
+    </section>
+</main>
+`;
 }
 
 function getAddPlanTemplate() {
@@ -154,27 +157,27 @@ function getAddPlanTemplate() {
             <section class="add-plan">
                 <div class="plan-title">
                 <h5 class="input-title-header">Where are you going?</h5>
-                   <textarea col="50" rows="8" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>Where are you going?</textarea>
+                   <textarea col="100" rows="8" name="country-title" id="country-title" placeholder="Name your trip here" maxlength="100" type="text" required>Where are you going?</textarea>
                 </div>
                 <div class="plan-date">
                     <h5 class="input-title-header">Season to go</h5>
-                   <textarea col="50" rows="8" name="season-to-go" id="season-to-go" required>When is the best time of year to go?</textarea>
+                   <textarea col="100" rows="8" name="season-to-go" id="season-to-go" required>When is the best time of year to go?</textarea>
                 </div>
                 <div class="plan-description">
                     <h5 class="input-title-header">Plan description</h5>
-                   <textarea col="50" rows="8" name="plan-description" id="country-description" required>Why do you want to go here?</textarea>
+                   <textarea col="100" rows="8" name="plan-description" id="country-description" required>Why do you want to go here?</textarea>
                 </div>
                 <div class="currency">
                     <h5 class="input-title-header">Currency information</h5>
-                   <textarea col="50" rows="8" name="currency" id="plan-currency" required>Currency name and exchange rate</textarea>
+                   <textarea col="100" rows="8" name="currency" id="plan-currency" required>Currency name and exchange rate</textarea>
                 </div>
                 <div class="foreign-words">
                     <h5 class="input-title-header">Foreign words to know before you go</h5>
-                   <textarea col="50" rows="8" name="foreign-words" id="plan-foreign-words" required>Foreign words to know before you go</textarea>
+                   <textarea col="100" rows="8" name="foreign-words" id="plan-foreign-words" required>Foreign words to know before you go</textarea>
                 </div>
                 <div class="to-do">
                 <h5 class="input-title-header">What do you want to do in this country?</h5>
-               <textarea col="50" rows="8" name="to-do" id="plan-to-do" required>What are you planning to do?</textarea>
+               <textarea col="100" rows="4" name="to-do" id="plan-to-do" required>What are you planning to do?</textarea>
                 </div>
             </section>
             <br>
