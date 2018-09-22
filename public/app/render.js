@@ -96,25 +96,25 @@ function getRenderPlanTemplate(plan) {
 function getUserDashboardTemplate(plans = []) {
     let plansHtml;
     if (plans.length > 0) {
-        plansHtml = plans.map(
+        (plansHtml = plans.map(
             plan => `
             <div class="plans-container">
             <h1 class="plans-title">${plan.title} </h1> 
             <button type=button id="js-edit-button" data-plan-id="${
-    plan.id
-}">View</button>
+            plan.id
+            }">View</button>
 <br>
 <button type="button" id="js-delete-button" data-plan-id="${
-    plan.id
-}">Delete</button> 
+            plan.id
+            }">Delete</button> 
 </div>
             `
-        );
+        )),
         dashboardWithPlansHtml(plansHtml);
     } else {
-        plansHtml = `
+        (plansHtml = `
     <h4>Time to plan!</h4>
-`;
+`),
         dashoboardWithoutPlansHtml(plansHtml);
     }
 }
