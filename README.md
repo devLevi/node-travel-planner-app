@@ -1,7 +1,5 @@
 # Tripbook
 
----
-
 _An application for easily planning vacations and trips_
 
 Tripbook came about when while planning a year-long trip around the world with my wife.
@@ -12,8 +10,6 @@ To make thinks clearer and ensures the right information gets added for each cou
 Live Link: [Tripbook](https://node-tripbook-app.herokuapp.com/)
 
 ## Tecnhnology used
-
----
 
 ### Front End
 
@@ -36,8 +32,6 @@ Live Link: [Tripbook](https://node-tripbook-app.herokuapp.com/)
 - Mocha
 
 ## Screenshots
-
----
 
 ### Landing Page View / Sign Up View:
 
