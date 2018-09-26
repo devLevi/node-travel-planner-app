@@ -20,17 +20,6 @@ body {
 }
 
 /* headers and titles */
-/* header h1 {
-  color: black;
-  font-size: 35px;
-  background-color: rgb(134, 222, 255);
-  font-family: 'Concert One';
-  position: relative;
-  height: flex;
-  width: 100%;
-  padding: 10px;
-  text-align: center;
-} */
 
 h1,
 h2 {
@@ -67,7 +56,10 @@ h3 {
 
 .plans-title {
   font-size: 18px;
-  margin-bottom: 5px;
+  margin-bottom: 40px;
+  background-color: #f4f8ff;
+  padding: 3px;
+  border-radius: 3px;
 }
 
 /* clickable links and buttons */
@@ -91,6 +83,10 @@ button {
 
 button:hover {
   color: #0066ff;
+}
+
+#js-edit-button {
+  margin-top: 25px;
 }
 
 /* fillable fields */
@@ -125,7 +121,7 @@ input {
 }
 
 .plans-container {
-  margin: 10px;
+  margin: 25px;
   padding: 10px;
   height: 90px;
 }
@@ -162,15 +158,17 @@ p {
 }
 
 @media only screen and (min-width: 700px) {
-  /* banner */
   body {
     max-width: 700px;
     margin: 0 auto;
   }
+
+  /* banner */
   .banner-container {
     width: 100%;
     text-align: center;
   }
+
   .tripbook-banner {
     display: inline-block;
     height: 200px;
@@ -184,6 +182,7 @@ p {
     margin-top: 15px;
   }
 
+  /* plans */
   .plans-container {
     float: left;
     width: 30.33%;
@@ -191,6 +190,14 @@ p {
     padding: 10px;
     height: 150px;
     clear: none;
+  }
+
+  .plans-title {
+    font-size: 25px;
+    margin-bottom: 40px;
+    background-color: #f4f8ff;
+    padding: 3px;
+    border-radius: 3px;
   }
 
   textarea,
