@@ -2,8 +2,8 @@
 
 _An application for easily planning vacations and trips_
 
-Tripbook came about when while planning a year-long trip around the world with my wife.
-To make thinks clearer and ensures the right information gets added for each country, I created an app which requires specific information regarding each country the user plans to travel to. Each country's information is stored in an easy to navigate dashboard for future reference.
+Tripbook came about while planning a year-long trip around the world with my wife.
+To make thinks clearer and ensure that the right information was added for each country, I created an app which requires specific information regarding each country the user plans to travel to. Each country's information is stored in an easy to navigate dashboard for future reference.
 
 ## Give it a try!
 
