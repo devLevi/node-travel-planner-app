@@ -6,7 +6,7 @@ To make thinks clearer and ensures the right information gets added for each cou
 
 **Give it a try!**
 
-Live Link: <a href="https://node-tripbook-app.herokuapp.com/" target="_blank">Tripbook</a>
+Live Link: [Tripbook](https://node-tripbook-app.herokuapp.com/){:target="\_blank"}
 
 Landing Page View / Sign Up View:
 ![Landing Page View / Sign Up View](public/images/signup.png)
