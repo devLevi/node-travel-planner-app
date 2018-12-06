@@ -98,17 +98,12 @@ router.put('/:id', (req, res) => {
             toUpdate[field] = req.body[field];
         }
     });
-    //FIXME: req.user.email ===plan.email
+
     TravelPlan.findById(req.params.id)
         .then(function(plan) {
-            // if (req.user.email === plan.email) {
             TravelPlan.findByIdAndUpdate(req.params.id, {
                 $set: toUpdate
             }).then(() => res.status(204).end());
-            // }
-            // else {
-            //     res.status(401).json({ message: 'Unauthorized user' });
-            // }
         })
         .catch(() => res.status(500).json({ message: 'Something went wrong' }));
 });
@@ -117,13 +112,9 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     TravelPlan.findById(req.params.id)
         .then(plan => {
-            // if (req.user.email === plan.email) {
             TravelPlan.findByIdAndRemove(req.params.id).then(() =>
                 res.status(204).end()
             );
-            // } else {
-            //     res.status(401).json({ message: 'Unauthorized user' });
-            // }
         })
         .catch(() =>
             res.status(500).json({ message: 'Internal server error' })
